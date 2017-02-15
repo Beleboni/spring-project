@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,11 +44,16 @@ public class ClientesController {
 	@Autowired
 	private Clientes clientes;
 	
+	private void addObjects(ModelAndView mv, Cliente cliente) {
+		mv.addObject("tiposPessoa", TipoPessoa.values());
+		mv.addObject("estados", estados.findAll());
+		mv.addObject(cliente);
+	}
+	
 	@RequestMapping("/novo")
 	public ModelAndView novo(Cliente cliente) {
 		ModelAndView mv = new ModelAndView("cliente/CadastroCliente");
-		mv.addObject("tiposPessoa", TipoPessoa.values());
-		mv.addObject("estados", estados.findAll());
+		this.addObjects(mv, cliente);
 		return mv;
 	}
 	
@@ -66,6 +72,18 @@ public class ClientesController {
 		
 		attributes.addFlashAttribute("mensagem", "Cliente salvo com sucesso!");
 		return new ModelAndView("redirect:/clientes/novo");
+	}
+	
+	@PostMapping("/alterar")
+	public ModelAndView alterar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return visualizar(cliente.getCodigo());
+		}
+		
+		cadastroClienteService.alterar(cliente);
+		
+		attributes.addFlashAttribute("mensagem", "Cliente alterado com sucesso!");
+		return new ModelAndView("redirect:/clientes/" + cliente.getCodigo());
 	}
 	
 	@GetMapping
@@ -95,6 +113,14 @@ public class ClientesController {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Void> tratarIllegalArgumentException(IllegalArgumentException e) {
 		return ResponseEntity.badRequest().build();
+	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView visualizar(@PathVariable Long codigo){
+		Cliente cliente = clientes.findOne(codigo);
+		ModelAndView mv = new ModelAndView("cliente/AlterarCliente");
+		this.addObjects(mv, cliente);
+		return mv;
 	}
 	
 }

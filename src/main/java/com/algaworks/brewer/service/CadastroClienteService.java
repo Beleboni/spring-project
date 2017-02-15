@@ -26,4 +26,9 @@ public class CadastroClienteService {
 		clientes.save(cliente);
 	}
 	
+	@Transactional
+	public void alterar(Cliente cliente) {
+		clientes.save(cliente);
+	}
+	
 }
