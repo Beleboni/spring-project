@@ -41,9 +41,15 @@ class TabelaItensVenda {
 		}
 	}
 	
-	public void alterarQuantidadeItens(Cerveja cerveja, Integer quantidade) {
+	public void alterarItens(Cerveja cerveja, Integer quantidade, Float valor) {
 		ItemVenda itemVenda = buscarItemPorCerveja(cerveja).get();
-		itemVenda.setQuantidade(quantidade);
+		if(quantidade != null){
+			itemVenda.setQuantidade(quantidade);
+		}
+		if(valor != null){
+			itemVenda.setValorUnitario(BigDecimal.valueOf(valor));
+		}
+		
 	}
 	
 	public void excluirItem(Cerveja cerveja) {

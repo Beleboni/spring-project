@@ -20,7 +20,12 @@
 					class="bw-tabela-cerveja-campo-quantidade  js-tabela-cerveja-quantidade-item" 
 					th:value="${item.quantidade}" data:codigo-cerveja="${item.cerveja.codigo}"
 					th:disabled="${venda != null ? venda.salvarProibido : false}"/>
-				<span>x R$[[${{item.valorUnitario}}]]</span>
+				<span> x R$ </span>	
+				<input type="text" maxlength="3" 
+					class="bw-tabela-cerveja-campo-quantidade  js-tabela-cerveja-valor-item" 
+					th:value="${item.valorUnitario}" data:codigo-cerveja="${item.cerveja.codigo}"
+					th:disabled="${venda != null ? venda.salvarProibido : false}"/>
+				<!-- <span>x R$[[${{item.valorUnitario}}]]</span> -->
 			</div>
 			<div class="bw-tabela-cerveja-valor-grande">R$[[${{item.valorTotal}}]]</div>
 		</div>

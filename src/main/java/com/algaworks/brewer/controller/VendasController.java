@@ -135,9 +135,9 @@ public class VendasController {
 	}
 	
 	@PutMapping("/item/{codigoCerveja}")
-	public ModelAndView alterarQuantidadeItem(@PathVariable("codigoCerveja") Cerveja cerveja
-			, Integer quantidade, String uuid) {
-		tabelaItens.alterarQuantidadeItens(uuid, cerveja, quantidade);
+	public ModelAndView alterarItem(@PathVariable("codigoCerveja") Cerveja cerveja
+			, Integer quantidade,Float valor, String uuid) {
+		tabelaItens.alterarItens(uuid, cerveja, quantidade, valor);
 		return mvTabelaItensVenda(uuid);
 	}
 	
