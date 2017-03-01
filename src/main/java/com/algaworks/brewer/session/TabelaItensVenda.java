@@ -13,21 +13,19 @@ class TabelaItensVenda {
 
 	private String uuid;
 	private List<ItemVenda> itens = new ArrayList<>();
-	
+
 	public TabelaItensVenda(String uuid) {
 		this.uuid = uuid;
 	}
 
 	public BigDecimal getValorTotal() {
-		return itens.stream()
-				.map(ItemVenda::getValorTotal)
-				.reduce(BigDecimal::add)
-				.orElse(BigDecimal.ZERO);
+		return itens.stream().map(ItemVenda::getValorTotal)
+				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
-	
+
 	public void adicionarItem(Cerveja cerveja, Integer quantidade) {
 		Optional<ItemVenda> itemVendaOptional = buscarItemPorCerveja(cerveja);
-		
+
 		ItemVenda itemVenda = null;
 		if (itemVendaOptional.isPresent()) {
 			itemVenda = itemVendaOptional.get();
@@ -40,25 +38,30 @@ class TabelaItensVenda {
 			itens.add(0, itemVenda);
 		}
 	}
-	
-	public void alterarItens(Cerveja cerveja, Integer quantidade, Float valor) {
+
+	public void alterarItens(Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
 		ItemVenda itemVenda = buscarItemPorCerveja(cerveja).get();
-		if(quantidade != null){
+
+		if (quantidade != null) {
 			itemVenda.setQuantidade(quantidade);
 		}
-		if(valor != null){
+
+		if (valor != null) {
 			itemVenda.setValorUnitario(BigDecimal.valueOf(valor));
 		}
 		
+		if (observacao != null) {
+			itemVenda.setObservacoes(observacao);
+		}
 	}
-	
+
 	public void excluirItem(Cerveja cerveja) {
 		int indice = IntStream.range(0, itens.size())
 				.filter(i -> itens.get(i).getCerveja().equals(cerveja))
 				.findAny().getAsInt();
 		itens.remove(indice);
 	}
-	
+
 	public int total() {
 		return itens.size();
 	}
@@ -66,10 +69,9 @@ class TabelaItensVenda {
 	public List<ItemVenda> getItens() {
 		return itens;
 	}
-	
+
 	private Optional<ItemVenda> buscarItemPorCerveja(Cerveja cerveja) {
-		return itens.stream()
-				.filter(i -> i.getCerveja().equals(cerveja))
+		return itens.stream().filter(i -> i.getCerveja().equals(cerveja))
 				.findAny();
 	}
 
@@ -101,5 +103,5 @@ class TabelaItensVenda {
 			return false;
 		return true;
 	}
-	
+
 }

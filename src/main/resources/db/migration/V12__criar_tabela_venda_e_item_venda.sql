@@ -16,6 +16,7 @@ CREATE TABLE venda (
 CREATE TABLE item_venda (
     codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     quantidade INTEGER NOT NULL,
+    observacoes VARCHAR(300),
     valor_unitario DECIMAL(10,2) NOT NULL,
     codigo_cerveja BIGINT(20) NOT NULL,
     codigo_venda BIGINT(20) NOT NULL,
@@ -45,6 +46,7 @@ CREATE TABLE pedido (
 CREATE TABLE item_pedido (
     codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     quantidade INTEGER NOT NULL,
+    observacoes VARCHAR(300),
     valor_unitario DECIMAL(10,2) NOT NULL,
     codigo_pedido BIGINT(20) NOT NULL,
     FOREIGN KEY (codigo_pedido) REFERENCES pedido(codigo)

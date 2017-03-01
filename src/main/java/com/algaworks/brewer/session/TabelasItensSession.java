@@ -22,9 +22,9 @@ public class TabelasItensSession {
 		tabelas.add(tabela);
 	}
 
-	public void alterarItens(String uuid, Cerveja cerveja, Integer quantidade, Float valor) {
+	public void alterarItens(String uuid, Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
-		tabela.alterarItens(cerveja, quantidade, valor);
+		tabela.alterarItens(cerveja, quantidade, valor, observacao);
 	}
 
 	public void excluirItem(String uuid, Cerveja cerveja) {

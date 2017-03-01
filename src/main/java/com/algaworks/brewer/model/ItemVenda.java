@@ -20,6 +20,8 @@ public class ItemVenda {
 	private Long codigo;
 
 	private Integer quantidade;
+	
+	private String observacoes;
 
 	@Column(name = "valor_unitario")
 	private BigDecimal valorUnitario;
@@ -74,6 +76,14 @@ public class ItemVenda {
 
 	public void setVenda(Venda venda) {
 		this.venda = venda;
+	}
+
+	public String getObservacoes() {
+		return observacoes;
+	}
+
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes;
 	}
 
 	@Override

@@ -11,6 +11,7 @@ Brewer.TabelaItens = (function() {
 	TabelaItens.prototype.iniciar = function() {
 		this.autocomplete.on('item-selecionado', onItemSelecionado.bind(this));
 		
+		bindObservacao.call(this);
 		bindQuantidade.call(this);
 		bindValor.call(this);
 		bindTabelaItem.call(this);
@@ -36,6 +37,7 @@ Brewer.TabelaItens = (function() {
 	function onItemAtualizadoNoServidor(html) {
 		this.tabelaCervejasContainer.html(html);
 		
+		bindObservacao.call(this);
 		bindQuantidade.call(this);
 		bindValor.call(this);
 		
@@ -89,6 +91,21 @@ Brewer.TabelaItens = (function() {
 		resposta.done(onItemAtualizadoNoServidor.bind(this));
 	}
 	
+	function onObservacaoItemAlterado(evento) {
+		var input = $(evento.target);
+		
+		var resposta = $.ajax({
+			url : 'item/' + input.data('codigo-cerveja'),
+			method : 'PUT',
+			data : {
+				observacao : input.val(),
+				uuid : this.uuid
+			}
+		});
+		
+		resposta.done(onItemAtualizadoNoServidor.bind(this));
+	}
+	
 	function onDoubleClick(evento) {
 		$(this).toggleClass('solicitando-exclusao');
 	}
@@ -113,6 +130,11 @@ Brewer.TabelaItens = (function() {
 		var valorItemInput = $('.js-tabela-cerveja-valor-item');
 		valorItemInput.on('change', onValorItemAlterado.bind(this));
 		valorItemInput.maskNumber({ integer: true, thousands: '' });
+	}
+	
+	function bindObservacao() {
+		var obsItemInput = $('.js-tabela-cerveja-observacao-item');
+		obsItemInput.on('change', onObservacaoItemAlterado.bind(this));
 	}
 	
 	function bindTabelaItem() {
