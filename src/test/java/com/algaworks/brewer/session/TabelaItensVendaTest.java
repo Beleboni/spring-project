@@ -30,7 +30,7 @@ public class TabelaItensVendaTest {
 		BigDecimal valor = new BigDecimal("8.90");
 		cerveja.setValor(valor);
 		
-		tabelaItensVenda.adicionarItem(cerveja, 1);
+		tabelaItensVenda.adicionarItem(cerveja, 1, "teste");
 		
 		assertEquals(valor, tabelaItensVenda.getValorTotal());
 	}
@@ -47,8 +47,8 @@ public class TabelaItensVendaTest {
 		BigDecimal v2 = new BigDecimal("4.99");
 		c2.setValor(v2);
 		
-		tabelaItensVenda.adicionarItem(c1, 1);
-		tabelaItensVenda.adicionarItem(c2, 2);
+		tabelaItensVenda.adicionarItem(c1, 1, null);
+		tabelaItensVenda.adicionarItem(c2, 2, null);
 		
 		assertEquals(new BigDecimal("18.88"), tabelaItensVenda.getValorTotal());
 	}
@@ -59,8 +59,8 @@ public class TabelaItensVendaTest {
 		c1.setCodigo(1L);
 		c1.setValor(new BigDecimal("4.50"));
 		
-		tabelaItensVenda.adicionarItem(c1, 1);
-		tabelaItensVenda.adicionarItem(c1, 1);
+		tabelaItensVenda.adicionarItem(c1, 1, null);
+		tabelaItensVenda.adicionarItem(c1, 1, null);
 		
 		assertEquals(1, tabelaItensVenda.total());
 		assertEquals(new BigDecimal("9.00"), tabelaItensVenda.getValorTotal());
@@ -72,7 +72,7 @@ public class TabelaItensVendaTest {
 		c1.setCodigo(1L);
 		c1.setValor(new BigDecimal("4.50"));
 		
-		tabelaItensVenda.adicionarItem(c1, 1);
+		tabelaItensVenda.adicionarItem(c1, 1, null);
 		//tabelaItensVenda.alterarQuantidadeItens(c1, 3);
 		
 		assertEquals(1, tabelaItensVenda.total());
@@ -93,9 +93,9 @@ public class TabelaItensVendaTest {
 		c3.setCodigo(3L);
 		c3.setValor(new BigDecimal("2.00"));
 		
-		tabelaItensVenda.adicionarItem(c1, 1);
-		tabelaItensVenda.adicionarItem(c2, 2);
-		tabelaItensVenda.adicionarItem(c3, 1);
+		tabelaItensVenda.adicionarItem(c1, 1, null);
+		tabelaItensVenda.adicionarItem(c2, 2, null);
+		tabelaItensVenda.adicionarItem(c3, 1, null);
 		
 		tabelaItensVenda.excluirItem(c2);
 		

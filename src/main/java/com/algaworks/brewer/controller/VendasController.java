@@ -139,7 +139,7 @@ public class VendasController {
 	@PostMapping("/item")
 	public ModelAndView adicionarItem(Long codigoCerveja, String uuid) {
 		Cerveja cerveja = cervejas.findOne(codigoCerveja);
-		tabelaItens.adicionarItem(uuid, cerveja, 1);
+		tabelaItens.adicionarItem(uuid, cerveja, 1, null);
 		return mvTabelaItensVenda(uuid);
 	}
 
@@ -180,7 +180,7 @@ public class VendasController {
 		setUuid(venda);
 		for (ItemVenda item : venda.getItens()) {
 			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(),
-					item.getQuantidade());
+					item.getQuantidade(), item.getObservacoes());
 		}
 
 		ModelAndView mv = nova(venda);

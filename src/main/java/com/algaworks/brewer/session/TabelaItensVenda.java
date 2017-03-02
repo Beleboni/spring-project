@@ -23,7 +23,7 @@ class TabelaItensVenda {
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
 
-	public void adicionarItem(Cerveja cerveja, Integer quantidade) {
+	public void adicionarItem(Cerveja cerveja, Integer quantidade, String observacoes) {
 		Optional<ItemVenda> itemVendaOptional = buscarItemPorCerveja(cerveja);
 
 		ItemVenda itemVenda = null;
@@ -35,6 +35,7 @@ class TabelaItensVenda {
 			itemVenda.setCerveja(cerveja);
 			itemVenda.setQuantidade(quantidade);
 			itemVenda.setValorUnitario(cerveja.getValor());
+			itemVenda.setObservacoes(observacoes);
 			itens.add(0, itemVenda);
 		}
 	}
