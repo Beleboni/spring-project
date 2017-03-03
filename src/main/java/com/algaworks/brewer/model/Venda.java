@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -215,7 +216,8 @@ public class Venda {
 	}
 	
 	public boolean isSalvarPermitido() {
-		return !status.equals(StatusVenda.CANCELADA);
+		List<StatusVenda> proibidos = Arrays.asList(StatusVenda.CANCELADA, StatusVenda.EMITIDA);
+		return !proibidos.contains(this.status);
 	}
 	
 	public boolean isSalvarProibido() {
