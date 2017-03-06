@@ -66,6 +66,9 @@ public class Venda {
 
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemVenda> itens = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comissao> comissoes = new ArrayList<>();
 
 	@Transient
 	private String uuid;
@@ -216,12 +219,15 @@ public class Venda {
 	}
 	
 	public boolean isSalvarPermitido() {
-		List<StatusVenda> proibidos = Arrays.asList(StatusVenda.CANCELADA, StatusVenda.EMITIDA);
-		return !proibidos.contains(this.status);
+		return StatusVenda.ORCAMENTO.equals(this.status);
 	}
 	
 	public boolean isSalvarProibido() {
 		return !isSalvarPermitido();
+	}
+	
+	public boolean isPodeAlterarStatus() {
+		return Arrays.asList(StatusVenda.EMITIDA, StatusVenda.ENTREGE_PARCIALMENTE).contains(this.status);
 	}
 	
 	private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
@@ -256,4 +262,12 @@ public class Venda {
 		return true;
 	}
 
+	public List<Comissao> getComissoes() {
+		return comissoes;
+	}
+
+	public void setComissoes(List<Comissao> comissoes) {
+		this.comissoes = comissoes;
+	}
+	
 }

@@ -25,17 +25,24 @@ public class CadastroVendaService {
 	
 	@Transactional
 	public Venda salvar(Venda venda) {
-		if (venda.isSalvarProibido()) {
-			throw new RuntimeException("Usuário tentando salvar uma venda proibida");
-		}
+//		if (venda.isSalvarProibido()) {
+//			throw new RuntimeException("Usuário tentando salvar uma venda proibida");
+//		}
 		
 		if (venda.isNova()) {
 			venda.setDataCriacao(LocalDateTime.now());
 		} else {
 			Venda vendaExistente = vendas.findOne(venda.getCodigo());
 			venda.setDataCriacao(vendaExistente.getDataCriacao());
+			
+			if (vendaExistente.isPodeAlterarStatus()) {
+				StatusVenda statusNovo = venda.getStatus();
+				venda = vendaExistente;
+				venda.setStatus(statusNovo);
+			}
 		}
 		
+		// Não existe (não se preocupar)
 		if (venda.getDataEntrega() != null) {
 			venda.setDataHoraEntrega(LocalDateTime.of(venda.getDataEntrega()
 					, venda.getHorarioEntrega() != null ? venda.getHorarioEntrega() : LocalTime.NOON));

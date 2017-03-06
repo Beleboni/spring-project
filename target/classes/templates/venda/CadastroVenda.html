@@ -110,6 +110,8 @@
 					<ul class="nav nav-tabs  js-abas-venda">
 					  <li role="presentation" class="active"><a href="#cervejas">Cervejas</a></li>
 					  <li role="presentation"><a href="#entrega">Entrega</a></li>
+					  <li role="presentation"><a href="#status">Status venda</a></li>
+					  <li role="presentation"><a href="#comissao">Comissões</a></li>
 					</ul>
 				</div>
 			</div>
@@ -150,9 +152,93 @@
 						</div>
 					</div>
 				</div>
+				
+				<div class="tab-pane" id="status">
+					<div class="row">
+						<div class="form-group col-sm-3">
+							<label class="control-label" for="status">Status venda</label>
+							<select class="form-control" name="status" th:field="*{status}" th:disabled="${!(venda.salvarPermitido || venda.podeAlterarStatus)}">
+								<option th:each="status : ${statusVenda}" th:value="${status}" th:text="${status.descricao}"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="tab-pane" id="comissao">
+					<div class="row">
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="totalPedido">Total pedido</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPedido" 
+									th:field="*{comissao.totalVenda}" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="entrada">Valor de entrada da venda</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="entrada" 
+									th:field="*{comissao.totalEntregue}" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="comissoes">Comissões</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">%</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="comissoes" 
+								th:field="*{comissao.percentual}" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="valor-comissao">Valor da comissão</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="valor-comissao" 
+									th:field="*{comissao.total}" />
+							</div>
+						</div>
+					</div>
+					
+					<div class="row"  th:each="comissao : ${venda.comissoes}">
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="totalPedido">Total pedido</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPedido" 
+									th:field="*{comissao.totalVenda}" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="entrada">Valor de entrada da venda</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="entrada" 
+									th:field="*{comissao.totalEntregue}" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="comissoes">Comissões</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">%</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="comissoes" 
+								th:field="*{comissao.percentual}" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-2">
+							<label class="control-label" for="valor-comissao">Valor da comissão</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="valor-comissao" 
+									th:field="*{comissao.total}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 			
-			<div class="row" style="clear: both" th:if="${venda.salvarPermitido}">
+			<div class="row" style="clear: both" th:if="${venda.salvarPermitido || venda.podeAlterarStatus}">
 				<div class="col-lg-12">
 					<div class="btn-group">
 					  <button type="submit" class="btn  btn-primary  js-submit-btn" data:acao="salvar">Salvar</button>

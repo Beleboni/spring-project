@@ -51,3 +51,13 @@ CREATE TABLE item_pedido (
     codigo_pedido BIGINT(20) NOT NULL,
     FOREIGN KEY (codigo_pedido) REFERENCES pedido(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE comissao (
+    codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+    data_criacao DATETIME NOT NULL,
+    total_venda DECIMAL(10,2),
+    total_entregue DECIMAL(10,2),
+    percentual DECIMAL(10,2) NOT NULL,
+    codigo_venda BIGINT(20) NOT NULL,
+    FOREIGN KEY (codigo_venda) REFERENCES venda(codigo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
