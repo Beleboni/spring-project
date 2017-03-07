@@ -57,6 +57,7 @@ public class VendasImpl implements VendasQueries {
 	public Venda buscarComItens(Long codigo) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
 		criteria.createAlias("itens", "i", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("comissoes", "c", JoinType.LEFT_OUTER_JOIN);
 		criteria.add(Restrictions.eq("codigo", codigo));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return (Venda) criteria.uniqueResult();
@@ -80,6 +81,13 @@ public class VendasImpl implements VendasQueries {
 					.setParameter("status", StatusVenda.EMITIDA)
 					.getSingleResult());
 		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public Long countOrcamento() {
+		return manager.createQuery("select count(codigo) from Venda where status = :status", Long.class)
+			.setParameter("status", StatusVenda.ORCAMENTO)
+			.getSingleResult();
 	}
 	
 	@Override
@@ -176,6 +184,6 @@ public class VendasImpl implements VendasQueries {
 				criteria.add(Restrictions.eq("c.cpfOuCnpj", TipoPessoa.removerFormatacao(filtro.getCpfOuCnpjCliente())));
 			}
 		}
-	}
+	}	
 
 }

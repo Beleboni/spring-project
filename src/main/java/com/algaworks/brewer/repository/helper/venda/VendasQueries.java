@@ -20,6 +20,7 @@ public interface VendasQueries {
 	public BigDecimal valorTotalNoAno();
 	public BigDecimal valorTotalNoMes();
 	public BigDecimal valorTicketMedioNoAno();
+	public Long countOrcamento();
 	
 	public List<VendaMes> totalPorMes();
 	public List<VendaOrigem> totalPorOrigem();

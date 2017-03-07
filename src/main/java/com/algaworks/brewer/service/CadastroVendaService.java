@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algaworks.brewer.model.Comissao;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Vendas;
@@ -19,43 +20,61 @@ public class CadastroVendaService {
 
 	@Autowired
 	private Vendas vendas;
-	
+
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	@Transactional
 	public Venda salvar(Venda venda) {
-//		if (venda.isSalvarProibido()) {
-//			throw new RuntimeException("Usuário tentando salvar uma venda proibida");
-//		}
-		
+		// if (venda.isSalvarProibido()) {
+		// throw new
+		// RuntimeException("Usuário tentando salvar uma venda proibida");
+		// }
+
 		if (venda.isNova()) {
 			venda.setDataCriacao(LocalDateTime.now());
 		} else {
 			Venda vendaExistente = vendas.findOne(venda.getCodigo());
 			venda.setDataCriacao(vendaExistente.getDataCriacao());
-			
+
 			if (vendaExistente.isPodeAlterarStatus()) {
 				StatusVenda statusNovo = venda.getStatus();
+				Comissao comissao = venda.getComissao();
 				venda = vendaExistente;
 				venda.setStatus(statusNovo);
+				venda.setComissao(comissao);
 			}
 		}
-		
+
+		// this.ajustaComissoes(venda);
+
 		// Não existe (não se preocupar)
 		if (venda.getDataEntrega() != null) {
-			venda.setDataHoraEntrega(LocalDateTime.of(venda.getDataEntrega()
-					, venda.getHorarioEntrega() != null ? venda.getHorarioEntrega() : LocalTime.NOON));
+			venda.setDataHoraEntrega(LocalDateTime.of(
+					venda.getDataEntrega(),
+					venda.getHorarioEntrega() != null ? venda
+							.getHorarioEntrega() : LocalTime.NOON));
 		}
-		
+
 		return vendas.saveAndFlush(venda);
+	}
+
+	private void ajustaComissoes(Venda venda) {
+		Comissao c = venda.getComissao();
+		if (c != null) {
+			c.setDataCriacao(LocalDateTime.now());
+			c.setTotalVenda(venda.getValorTotal());
+			c.setVenda(venda);
+			
+			venda.getComissoes().add(c);
+		}
 	}
 
 	@Transactional
 	public void emitir(Venda venda) {
 		venda.setStatus(StatusVenda.EMITIDA);
 		salvar(venda);
-		
+
 		publisher.publishEvent(new VendaEvent(venda));
 	}
 
@@ -63,7 +82,7 @@ public class CadastroVendaService {
 	@Transactional
 	public void cancelar(Venda venda) {
 		Venda vendaExistente = vendas.findOne(venda.getCodigo());
-		
+
 		vendaExistente.setStatus(StatusVenda.CANCELADA);
 		vendas.save(vendaExistente);
 	}

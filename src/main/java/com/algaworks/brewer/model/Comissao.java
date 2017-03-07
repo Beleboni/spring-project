@@ -36,8 +36,11 @@ public class Comissao {
 	@Column(name = "total_entregue")
 	private BigDecimal totalEntregue;
 	
-	@Column(name = "pecentual")
-	private BigDecimal percentual; 
+	@Column(name = "percentual")
+	private BigDecimal percentual;
+	
+//	@Column(name = "pecentual")
+//	private BigDecimal percentualRepresentada;
 	
 	public BigDecimal getTotal() {
 		return this.totalEntregue.multiply(this.percentual.divide(BigDecimal.valueOf(100)));
