@@ -1,5 +1,6 @@
 package com.algaworks.brewer.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +32,7 @@ import com.algaworks.brewer.dto.VendaMes;
 import com.algaworks.brewer.dto.VendaOrigem;
 import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
+import com.algaworks.brewer.model.Comissao;
 import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -183,7 +185,11 @@ public class VendasController {
 					item.getQuantidade(), item.getObservacoes());
 		}
 
+		List<Comissao> comissoes = new ArrayList<>();
+		venda.getComissoes().forEach(c -> comissoes.add(c));
+		
 		ModelAndView mv = nova(venda);
+		//mv.addObject("css", comissoes);
 		mv.addObject(venda);
 		return mv;
 	}

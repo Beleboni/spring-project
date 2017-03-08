@@ -119,3 +119,7 @@ $(function() {
 	security.enable();
 	
 });
+
+function getWith2Cases(value) {
+	return Math.floor(value * 100) / 100;
+}

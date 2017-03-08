@@ -166,33 +166,51 @@
 				
 				<div class="tab-pane" id="comissao">
 					<div class="row">
-						<div class="form-group  col-sm-2">
-							<label class="control-label" for="entrada">Valor de entrada da venda</label>
+						<div class="form-group  col-sm-4">
+							<label class="control-label" for="totalEntregue">Entrada da venda</label>
 							<div class="input-group">
 			      				<div class="input-group-addon">R$</div> 
-								<input type="text" maxlength="14" class="form-control  js-decimal" id="entrada" 
+								<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="totalEntregue" 
 									th:name="|comissao.totalEntregue|" />
 							</div>
 						</div>
-						<div class="form-group  col-sm-2">
-							<label class="control-label" for="comissoes">Comissões</label>
+						<div class="form-group  col-sm-4">
+							<label class="control-label" for="porcentagemVendedor">Comissão vendedor</label>
 							<div class="input-group">
 			      				<div class="input-group-addon">%</div> 
-								<input type="text" maxlength="14" class="form-control  js-decimal" id="comissoes" 
+								<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="porcentagemVendedor" 
 									th:name="|comissao.percentual|" />
 							</div>
 						</div>
-						<div class="form-group  col-sm-2">
-							<label class="control-label" for="valor-comissao">Valor da comissão</label>
+						<div class="form-group  col-sm-4">
+							<label class="control-label" for="valor-comissao">Total da comissão</label>
 							<div class="input-group">
 			      				<div class="input-group-addon">R$</div> 
-								<input type="text" maxlength="14" class="form-control  js-decimal" id="valor-comissao" />
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPorcentagemVendedor" disabled="disabled"/>
 							</div>
 						</div>
 					</div>
 					
-					<div class="row"  th:each="comissao : ${comissoes}">
-						<div class="form-group  col-sm-2">
+					<div class="row">
+						<div class="form-group  col-sm-4">
+							<label class="control-label" for="porcentagemRepresentada">Comissão Representada</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">%</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="porcentagemRepresentada" 
+									th:name="|comissao.percentual|" />
+							</div>
+						</div>
+						<div class="form-group  col-sm-4">
+							<label class="control-label" for="totalPorcentagemRepresentada">Total da comissão</label>
+							<div class="input-group">
+			      				<div class="input-group-addon">R$</div> 
+								<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPorcentagemRepresentada" disabled="disabled"/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row"  th:each="comissao : ${css}">
+						<div class="form-group  col-sm-4">
 							<label class="control-label" for="entrada">Valor de entrada da venda</label>
 							<div class="input-group">
 			      				<div class="input-group-addon">R$</div> 
@@ -200,7 +218,7 @@
 									th:field="*{comissao.totalEntregue}" />
 							</div>
 						</div>
-						<div class="form-group  col-sm-2">
+						<div class="form-group  col-sm-4">
 							<label class="control-label" for="comissoes">Comissões</label>
 							<div class="input-group">
 			      				<div class="input-group-addon">%</div> 
@@ -208,12 +226,12 @@
 								th:field="*{comissao.percentual}" />
 							</div>
 						</div>
-						<div class="form-group  col-sm-2">
+						<div class="form-group  col-sm-4">
 							<label class="control-label" for="valor-comissao">Valor da comissão</label>
 							<div class="input-group">
 			      				<div class="input-group-addon">R$</div> 
 								<input type="text" maxlength="14" class="form-control  js-decimal" id="valor-comissao" 
-									th:field="*{comissao.total}" />
+									th:value="*{comissao.total}" />
 							</div>
 						</div>
 					</div>
@@ -252,6 +270,7 @@
 	<script th:src="@{/javascripts/venda.autocomplete-itens.js}"></script>
 	<script th:src="@{/javascripts/venda.tabela-itens.js}"></script>
 	<script th:src="@{/javascripts/venda.js}"></script>
+	<script th:src="@{/javascripts/campos.js}"></script>
 	<script th:src="@{/javascripts/venda.botoes-submit.js}"></script>
 	<script>
 	$(function() {

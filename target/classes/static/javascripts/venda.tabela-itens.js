@@ -122,14 +122,16 @@ Brewer.TabelaItens = (function() {
 	
 	function bindQuantidade() {
 		var quantidadeItemInput = $('.js-tabela-cerveja-quantidade-item');
-		quantidadeItemInput.on('change', onQuantidadeItemAlterado.bind(this));
+		quantidadeItemInput.on('focusout', onQuantidadeItemAlterado.bind(this));
 		quantidadeItemInput.maskNumber({ integer: true, thousands: '' });
 	}
 	
 	function bindValor() {
 		var valorItemInput = $('.js-tabela-cerveja-valor-item');
-		valorItemInput.on('change', onValorItemAlterado.bind(this));
-		valorItemInput.maskNumber({ integer: true, thousands: '' });
+		valorItemInput.on('focusout', onValorItemAlterado.bind(this));
+		// Aqui
+		valorItemInput.maskNumber({ decimal: '.', thousands: '' });
+		// daqui
 	}
 	
 	function bindObservacao() {
