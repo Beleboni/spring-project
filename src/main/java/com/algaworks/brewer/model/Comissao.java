@@ -94,4 +94,8 @@ public class Comissao {
 		this.percentual = percentual;
 	}
 	
+	public boolean isValido() {
+		return this.percentual != null && this.totalEntregue != null;
+	}
+	
 }

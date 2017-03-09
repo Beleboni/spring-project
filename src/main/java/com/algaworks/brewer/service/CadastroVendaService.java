@@ -46,7 +46,7 @@ public class CadastroVendaService {
 			}
 		}
 
-		// this.ajustaComissoes(venda);
+		this.ajustaComissoes(venda);
 
 		// Não existe (não se preocupar)
 		if (venda.getDataEntrega() != null) {
@@ -65,8 +65,10 @@ public class CadastroVendaService {
 			c.setDataCriacao(LocalDateTime.now());
 			c.setTotalVenda(venda.getValorTotal());
 			c.setVenda(venda);
-			
-			venda.getComissoes().add(c);
+		
+			if (c.isValido()) {
+				venda.getComissoes().add(c);
+			}
 		}
 	}
 

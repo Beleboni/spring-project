@@ -5,10 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -67,7 +65,7 @@ public class Venda {
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ItemVenda> itens = new ArrayList<>();
+	private Set<ItemVenda> itens = new HashSet<>();
 	
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
 	private Set<Comissao> comissoes = new HashSet<>();
@@ -166,11 +164,11 @@ public class Venda {
 		this.status = status;
 	}
 
-	public List<ItemVenda> getItens() {
+	public Set<ItemVenda> getItens() {
 		return itens;
 	}
 
-	public void setItens(List<ItemVenda> itens) {
+	public void setItens(Set<ItemVenda> itens) {
 		this.itens = itens;
 	}
 
@@ -202,7 +200,7 @@ public class Venda {
 		return codigo == null;
 	}
 	
-	public void adicionarItens(List<ItemVenda> itens) {
+	public void adicionarItens(Set<ItemVenda> itens) {
 		this.itens = itens;
 		this.itens.forEach(i -> i.setVenda(this));
 	}
@@ -282,7 +280,5 @@ public class Venda {
 	public void setComissao(Comissao comissao) {
 		this.comissao = comissao;
 	}
-	
-	
 	
 }

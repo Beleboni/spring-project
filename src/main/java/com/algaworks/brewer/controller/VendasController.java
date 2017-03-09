@@ -1,8 +1,8 @@
 package com.algaworks.brewer.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,7 +32,6 @@ import com.algaworks.brewer.dto.VendaMes;
 import com.algaworks.brewer.dto.VendaOrigem;
 import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
-import com.algaworks.brewer.model.Comissao;
 import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -82,6 +81,7 @@ public class VendasController {
 		mv.addObject("valorDesconto", venda.getValorDesconto());
 		mv.addObject("valorTotalItens", tabelaItens.getValorTotal(venda.getUuid()));
 		mv.addObject("statusVenda", StatusVenda.values());
+		mv.addObject("css", venda.getComissoes());
 
 		return mv;
 	}
@@ -184,12 +184,8 @@ public class VendasController {
 			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(),
 					item.getQuantidade(), item.getObservacoes());
 		}
-
-		List<Comissao> comissoes = new ArrayList<>();
-		venda.getComissoes().forEach(c -> comissoes.add(c));
 		
 		ModelAndView mv = nova(venda);
-		//mv.addObject("css", comissoes);
 		mv.addObject(venda);
 		return mv;
 	}
@@ -226,7 +222,8 @@ public class VendasController {
 	}
 
 	private void validarVenda(Venda venda, BindingResult result) {
-		venda.adicionarItens(tabelaItens.getItens(venda.getUuid()));
+		List<ItemVenda> itens = tabelaItens.getItens(venda.getUuid());
+		venda.adicionarItens(itens.stream().collect(Collectors.toSet()));
 		venda.calcularValorTotal();
 
 		vendaValidator.validate(venda, result);

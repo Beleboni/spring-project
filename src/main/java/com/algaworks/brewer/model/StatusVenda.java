@@ -8,7 +8,6 @@ public enum StatusVenda {
 	ENTREGE_PARCIALMENTE("Entregue parcialmente"),
 	CONCLUIDO("Concluído");
 	
-
 	private String descricao;
 
 	StatusVenda(String descricao) {
