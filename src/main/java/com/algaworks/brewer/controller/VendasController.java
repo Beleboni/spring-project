@@ -2,7 +2,6 @@ package com.algaworks.brewer.controller;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -177,7 +176,7 @@ public class VendasController {
 
 	@GetMapping("/{codigo}")
 	public ModelAndView editar(@PathVariable Long codigo) {
-		Venda venda = vendas.buscarComItens(codigo);
+		Venda venda = cadastroVendaService.buscar(codigo);
 
 		setUuid(venda);
 		for (ItemVenda item : venda.getItens()) {
@@ -222,8 +221,7 @@ public class VendasController {
 	}
 
 	private void validarVenda(Venda venda, BindingResult result) {
-		List<ItemVenda> itens = tabelaItens.getItens(venda.getUuid());
-		venda.adicionarItens(itens.stream().collect(Collectors.toSet()));
+		venda.adicionarItens(tabelaItens.getItens(venda.getUuid()));
 		venda.calcularValorTotal();
 
 		vendaValidator.validate(venda, result);

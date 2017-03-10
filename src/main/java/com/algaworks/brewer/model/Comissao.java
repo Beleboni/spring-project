@@ -1,6 +1,7 @@
 package com.algaworks.brewer.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -43,7 +44,9 @@ public class Comissao {
 //	private BigDecimal percentualRepresentada;
 	
 	public BigDecimal getTotal() {
-		return this.totalEntregue.multiply(this.percentual.divide(BigDecimal.valueOf(100)));
+		BigDecimal multiply = this.totalEntregue.multiply(this.percentual.divide(BigDecimal.valueOf(100)));
+		multiply.setScale(2, RoundingMode.HALF_EVEN);
+		return multiply;
 	}
 
 	public Long getCodigo() {

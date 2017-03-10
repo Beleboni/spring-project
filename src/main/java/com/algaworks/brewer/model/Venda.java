@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -65,7 +67,7 @@ public class Venda {
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<ItemVenda> itens = new HashSet<>();
+	private List<ItemVenda> itens = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
 	private Set<Comissao> comissoes = new HashSet<>();
@@ -163,12 +165,12 @@ public class Venda {
 	public void setStatus(StatusVenda status) {
 		this.status = status;
 	}
-
-	public Set<ItemVenda> getItens() {
+	
+	public List<ItemVenda> getItens() {
 		return itens;
 	}
 
-	public void setItens(Set<ItemVenda> itens) {
+	public void setItens(List<ItemVenda> itens) {
 		this.itens = itens;
 	}
 
@@ -200,7 +202,7 @@ public class Venda {
 		return codigo == null;
 	}
 	
-	public void adicionarItens(Set<ItemVenda> itens) {
+	public void adicionarItens(List<ItemVenda> itens) {
 		this.itens = itens;
 		this.itens.forEach(i -> i.setVenda(this));
 	}
@@ -231,6 +233,10 @@ public class Venda {
 	
 	public boolean isPodeAlterarStatus() {
 		return Arrays.asList(StatusVenda.EMITIDA, StatusVenda.ENTREGE_PARCIALMENTE).contains(this.status);
+	}
+	
+	public boolean isNaoCadastraComissao(){
+		return Arrays.asList(StatusVenda.CANCELADA, StatusVenda.ORCAMENTO, StatusVenda.EMITIDA, StatusVenda.CONCLUIDO).contains(this.status);
 	}
 	
 	private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {

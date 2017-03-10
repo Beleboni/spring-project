@@ -2,6 +2,8 @@ package com.algaworks.brewer.service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.brewer.model.Comissao;
+import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Vendas;
@@ -87,6 +90,13 @@ public class CadastroVendaService {
 
 		vendaExistente.setStatus(StatusVenda.CANCELADA);
 		vendas.save(vendaExistente);
+	}
+	
+	public Venda buscar(Long codigo) {
+		Venda venda = vendas.buscarComItens(codigo);
+		Set<ItemVenda> set = venda.getItens().stream().collect(Collectors.toSet());
+		venda.setItens(set.stream().collect(Collectors.toList()));
+		return venda;
 	}
 
 }
