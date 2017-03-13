@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.algaworks.brewer.dto.CodigoDescricao;
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.filter.UsuarioFilter;
 
@@ -18,5 +19,7 @@ public interface UsuariosQueries {
 	public Page<Usuario> filtrar(UsuarioFilter filtro, Pageable pageable);
 	
 	public Usuario buscarComGrupos(Long codigo);
+	
+	public List<CodigoDescricao> pesquisaRapida(String nome);
 	
 }

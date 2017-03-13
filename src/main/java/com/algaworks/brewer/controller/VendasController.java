@@ -87,15 +87,11 @@ public class VendasController {
 
 	@PostMapping(value = "/nova", params = "salvar")
 	public ModelAndView salvar(Venda venda, BindingResult result,
-			RedirectAttributes attributes,
-			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+			RedirectAttributes attributes) {
 		validarVenda(venda, result);
 		if (result.hasErrors()) {
 			return nova(venda);
 		}
-
-		venda.setUsuario(usuarioSistema.getUsuario());
-
 		cadastroVendaService.salvar(venda);
 		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
 		return new ModelAndView("redirect:/vendas/nova");

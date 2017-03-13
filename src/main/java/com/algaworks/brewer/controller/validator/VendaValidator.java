@@ -20,6 +20,7 @@ public class VendaValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ValidationUtils.rejectIfEmpty(errors, "cliente.codigo", "", "Selecione um cliente na pesquisa rápida");
+		ValidationUtils.rejectIfEmpty(errors, "usuario.codigo", "", "Selecione um vendedor na pesquisa rápida");
 		
 		Venda venda = (Venda) target;
 		validarSeInformouApenasHorarioEntrega(errors, venda);

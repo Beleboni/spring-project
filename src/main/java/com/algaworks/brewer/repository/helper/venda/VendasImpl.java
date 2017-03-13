@@ -47,8 +47,11 @@ public class VendasImpl implements VendasQueries {
 	public Page<Venda> filtrar(VendaFilter filtro, Pageable pageable) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
 		paginacaoUtil.preparar(criteria, pageable);
+		
 		adicionarFiltro(filtro, criteria);
 		
+		// Test this out.
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return new PageImpl<>(criteria.list(), pageable, total(filtro));
 	}
 	

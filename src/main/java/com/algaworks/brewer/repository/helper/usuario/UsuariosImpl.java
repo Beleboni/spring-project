@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.algaworks.brewer.dto.CodigoDescricao;
 import com.algaworks.brewer.model.Grupo;
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.model.UsuarioGrupo;
@@ -50,6 +51,14 @@ public class UsuariosImpl implements UsuariosQueries {
 		return manager.createQuery(
 				"select distinct p.nome from Usuario u inner join u.grupos g inner join g.permissoes p where u = :usuario", String.class)
 				.setParameter("usuario", usuario)
+				.getResultList();
+	}
+	
+	@Override
+	public List<CodigoDescricao> pesquisaRapida(String nome) {
+		return manager.createQuery(
+				"select new com.algaworks.brewer.dto.CodigoDescricaoDTO(u.codigo, u.nome) from Usuario u where u.nome like :nome", CodigoDescricao.class)
+				.setParameter("nome", "%" + nome + "%")
 				.getResultList();
 	}
 
