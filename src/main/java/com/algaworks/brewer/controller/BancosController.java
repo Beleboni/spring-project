@@ -67,5 +67,17 @@ public class BancosController {
 		return novo(banco);
 	}
 	
+	@GetMapping("/excluir/{codigo}")
+	public ModelAndView excluir(@PathVariable Long codigo, RedirectAttributes attributes){
+		try {
+			cadastroBancoService.excluir(codigo);
+			attributes.addFlashAttribute("mensagem", "Banco excluido com sucesso!");
+		} catch (RuntimeException e) {
+			attributes.addFlashAttribute("mensagem", e.getMessage());
+		}
+		
+		return new ModelAndView("redirect:/bancos");
+	}
+	
 
 }

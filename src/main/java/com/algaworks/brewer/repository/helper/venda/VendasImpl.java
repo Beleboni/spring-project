@@ -187,6 +187,14 @@ public class VendasImpl implements VendasQueries {
 				criteria.add(Restrictions.eq("c.cpfOuCnpj", TipoPessoa.removerFormatacao(filtro.getCpfOuCnpjCliente())));
 			}
 		}
+	}
+
+	@Override
+	public Long countByBanco(Long idBanco) {
+//		return manager.createQuery("select count(codigo) from Venda where banco.id = :idBanco", Long.class)
+//				.setParameter("idBanco", idBanco)
+//				.getSingleResult();
+		return 1l;
 	}	
 
 }

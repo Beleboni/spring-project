@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.brewer.model.Banco;
 import com.algaworks.brewer.repository.Bancos;
+import com.algaworks.brewer.repository.Vendas;
 import com.algaworks.brewer.service.exception.DescricaoBancoJaCadastradoException;
 
 @Service
@@ -17,6 +18,8 @@ public class CadastroBancoService {
 	
 	@Autowired
 	private Bancos bancos;
+	@Autowired
+	private Vendas vendas;
 	
 	@Transactional
 	public void salvar(Banco banco){
@@ -29,6 +32,19 @@ public class CadastroBancoService {
 		bancos.save(banco);
 	}
 	
-	
+	@Transactional
+	public void excluir(Long idBanco) {
+		Banco banco = bancos.findOne(idBanco);
+		if (banco == null) {
+			throw new RuntimeException("Banco não existe mais.");
+		}
+		
+		Long count = vendas.countByBanco(idBanco);
+		if (count > 0) {
+			throw new RuntimeException("Banco já está sendo usado");
+		}
+		
+		bancos.delete(idBanco);
+	}
 
 }

@@ -33,6 +33,7 @@
 	
 	<div class="container-fluid">
 		<form method="GET" th:object="${bancoFilter}">
+			<brewer:message/>
 			<div class="row">
 					<div class="form-group  col-sm-8">
 						<input type="text" class="form-control" id="nome" th:field="*{descricao}"/>
@@ -58,6 +59,9 @@
 						<td class="text-center">
 							<a th:href="@{/bancos/{codigo}(codigo=${banco.codigo})}" class="btn  btn-link  btn-xs" title="Editar"> 
 								<i class="glyphicon glyphicon-pencil"></i>
+							</a>
+							<a th:href="@{/bancos/excluir/{codigo}(codigo=${banco.codigo})}" class="btn  btn-link  btn-xs" title="Excluir"> 
+								<i class="glyphicon glyphicon-trash"></i>
 							</a>
 						</td>
 					</tr>

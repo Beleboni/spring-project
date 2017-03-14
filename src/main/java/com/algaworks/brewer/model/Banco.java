@@ -20,6 +20,8 @@ public class Banco implements Serializable {
 	
 	private String descricao;
 	
+	private boolean ativo = true;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -31,6 +33,14 @@ public class Banco implements Serializable {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public boolean isAtivo() {
+		return ativo;
+	}
+	
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 	@Override
 	public int hashCode() {

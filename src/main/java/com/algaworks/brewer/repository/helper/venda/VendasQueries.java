@@ -25,4 +25,6 @@ public interface VendasQueries {
 	public List<VendaMes> totalPorMes();
 	public List<VendaOrigem> totalPorOrigem();
 	
+	public Long countByBanco(Long idBanco);
+	
 }
