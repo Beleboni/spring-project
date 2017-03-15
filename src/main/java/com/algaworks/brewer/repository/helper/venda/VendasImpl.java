@@ -191,7 +191,7 @@ public class VendasImpl implements VendasQueries {
 
 	@Override
 	public Long countByBanco(Long idBanco) {
-//		return manager.createQuery("select count(codigo) from Venda where banco.id = :idBanco", Long.class)
+//		return manager.createQuery("select count(venda.codigo) from Venda venda where venda.banco.id = :idBanco", Long.class)
 //				.setParameter("idBanco", idBanco)
 //				.getSingleResult();
 		return 1l;

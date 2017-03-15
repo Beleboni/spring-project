@@ -73,7 +73,7 @@ public class BancosController {
 			cadastroBancoService.excluir(codigo);
 			attributes.addFlashAttribute("mensagem", "Banco excluido com sucesso!");
 		} catch (RuntimeException e) {
-			attributes.addFlashAttribute("mensagem", e.getMessage());
+			attributes.addFlashAttribute("mensagemErro", e.getMessage());
 		}
 		
 		return new ModelAndView("redirect:/bancos");

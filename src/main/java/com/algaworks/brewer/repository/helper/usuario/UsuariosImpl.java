@@ -57,6 +57,7 @@ public class UsuariosImpl implements UsuariosQueries {
 	@Override
 	public List<CodigoDescricao> pesquisaRapida(String nome) {
 		return manager.createQuery(
+				//"select new com.algaworks.brewer.dto.CodigoDescricaoDTO(u.codigo, u.nome) from Usuario u where u.nome like :nome and u.ativo = true", CodigoDescricao.class)
 				"select new com.algaworks.brewer.dto.CodigoDescricaoDTO(u.codigo, u.nome) from Usuario u where u.nome like :nome", CodigoDescricao.class)
 				.setParameter("nome", "%" + nome + "%")
 				.getResultList();
