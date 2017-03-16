@@ -64,14 +64,15 @@ public class Venda {
 	@Enumerated(EnumType.STRING)
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)//, orphanRemoval = true)
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+	// , orphanRemoval = true)
 	private List<ItemVenda> itens = new ArrayList<>();
-	
-//	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
-//	private Set<Comissao> comissoes = new HashSet<>();
-//	
-//	@Transient
-//	private Comissao comissao;
+
+	// @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+	// private Set<Comissao> comissoes = new HashSet<>();
+	//
+	// @Transient
+	// private Comissao comissao;
 
 	@Transient
 	private String uuid;
@@ -87,9 +88,10 @@ public class Venda {
 	public Venda(Long codigo) {
 		this.codigo = codigo;
 	}
-	
-	public Venda() {}
-	
+
+	public Venda() {
+	}
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -151,7 +153,12 @@ public class Venda {
 	}
 
 	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+		// Evita transients ao salvar entidade cliente null
+		if (cliente != null && cliente.getCodigo() != null) {
+			this.cliente = cliente;
+		} else {
+			this.cliente = null;
+		}
 	}
 
 	public Usuario getUsuario() {
@@ -169,11 +176,11 @@ public class Venda {
 	public void setStatus(StatusVenda status) {
 		this.status = status;
 	}
-	
+
 	public List<ItemVenda> getItens() {
 		return itens;
 	}
-
+	
 	public void setItens(List<ItemVenda> itens) {
 		this.itens = itens;
 	}
@@ -205,48 +212,54 @@ public class Venda {
 	public boolean isNova() {
 		return codigo == null;
 	}
-	
+
 	public void adicionarItens(List<ItemVenda> itens) {
 		this.itens = itens;
 		this.itens.forEach(i -> i.setVenda(this));
 	}
-	
+
 	public BigDecimal getValorTotalItens() {
-		return getItens().stream()
-				.map(ItemVenda::getValorTotal)
-				.reduce(BigDecimal::add)
-				.orElse(BigDecimal.ZERO);
+		return getItens().stream().map(ItemVenda::getValorTotal)
+				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
-	
+
 	public void calcularValorTotal() {
-		this.valorTotal = calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto());
+		this.valorTotal = calcularValorTotal(getValorTotalItens(),
+				getValorFrete(), getValorDesconto());
 	}
-	
+
 	public Long getDiasCriacao() {
-		LocalDate inicio = dataCriacao != null ? dataCriacao.toLocalDate() : LocalDate.now();
+		LocalDate inicio = dataCriacao != null ? dataCriacao.toLocalDate()
+				: LocalDate.now();
 		return ChronoUnit.DAYS.between(inicio, LocalDate.now());
 	}
-	
+
 	public boolean isSalvarPermitido() {
 		return StatusVenda.ORCAMENTO.equals(this.status);
 	}
-	
+
 	public boolean isSalvarProibido() {
 		return !isSalvarPermitido();
 	}
-	
+
 	public boolean isPodeAlterarStatus() {
-		return Arrays.asList(StatusVenda.EMITIDA, StatusVenda.ENTREGE_PARCIALMENTE).contains(this.status);
+		return Arrays.asList(StatusVenda.EMITIDA,
+				StatusVenda.ENTREGE_PARCIALMENTE).contains(this.status);
 	}
-	
-	public boolean isNaoCadastraComissao(){
-		return Arrays.asList(StatusVenda.CANCELADA, StatusVenda.ORCAMENTO, StatusVenda.EMITIDA, StatusVenda.CONCLUIDO).contains(this.status);
+
+	public boolean isNaoCadastraComissao() {
+		return Arrays.asList(StatusVenda.CANCELADA, StatusVenda.ORCAMENTO,
+				StatusVenda.EMITIDA, StatusVenda.CONCLUIDO).contains(
+				this.status);
 	}
-	
-	private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
-		BigDecimal valorTotal = valorTotalItens
-				.add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
-				.subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
+
+	private BigDecimal calcularValorTotal(BigDecimal valorTotalItens,
+			BigDecimal valorFrete, BigDecimal valorDesconto) {
+		BigDecimal valorTotal = valorTotalItens.add(
+				Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
+				.subtract(
+						Optional.ofNullable(valorDesconto).orElse(
+								BigDecimal.ZERO));
 		return valorTotal;
 	}
 
@@ -275,20 +288,20 @@ public class Venda {
 		return true;
 	}
 
-//	public Set<Comissao> getComissoes() {
-//		return comissoes;
-//	}
-//
-//	public void setComissoes(Set<Comissao> comissoes) {
-//		this.comissoes = comissoes;
-//	}
-//
-//	public Comissao getComissao() {
-//		return comissao;
-//	}
-//
-//	public void setComissao(Comissao comissao) {
-//		this.comissao = comissao;
-//	}
-	
+	// public Set<Comissao> getComissoes() {
+	// return comissoes;
+	// }
+	//
+	// public void setComissoes(Set<Comissao> comissoes) {
+	// this.comissoes = comissoes;
+	// }
+	//
+	// public Comissao getComissao() {
+	// return comissao;
+	// }
+	//
+	// public void setComissao(Comissao comissao) {
+	// this.comissao = comissao;
+	// }
+
 }
