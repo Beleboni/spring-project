@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algaworks.brewer.model.Comissao;
 import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
@@ -42,14 +41,14 @@ public class CadastroVendaService {
 
 			if (vendaExistente.isPodeAlterarStatus()) {
 				StatusVenda statusNovo = venda.getStatus();
-				Comissao comissao = venda.getComissao();
+				//Comissao comissao = venda.getComissao();
 				venda = vendaExistente;
 				venda.setStatus(statusNovo);
-				venda.setComissao(comissao);
+				//venda.setComissao(comissao);
 			}
 		}
 
-		this.ajustaComissoes(venda);
+		//this.ajustaComissoes(venda);
 
 		// Não existe (não se preocupar)
 		if (venda.getDataEntrega() != null) {
@@ -62,18 +61,18 @@ public class CadastroVendaService {
 		return vendas.saveAndFlush(venda);
 	}
 
-	private void ajustaComissoes(Venda venda) {
-		Comissao c = venda.getComissao();
-		if (c != null) {
-			c.setDataCriacao(LocalDateTime.now());
-			c.setTotalVenda(venda.getValorTotal());
-			c.setVenda(venda);
-		
-			if (c.isValido()) {
-				venda.getComissoes().add(c);
-			}
-		}
-	}
+//	private void ajustaComissoes(Venda venda) {
+//		Comissao c = venda.getComissao();
+//		if (c != null) {
+//			c.setDataCriacao(LocalDateTime.now());
+//			c.setTotalVenda(venda.getValorTotal());
+//			c.setVenda(venda);
+//		
+//			if (c.isValido()) {
+//				venda.getComissoes().add(c);
+//			}
+//		}
+//	}
 
 	@Transactional
 	public void emitir(Venda venda) {

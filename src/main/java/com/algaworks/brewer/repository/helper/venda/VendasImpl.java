@@ -60,7 +60,8 @@ public class VendasImpl implements VendasQueries {
 	public Venda buscarComItens(Long codigo) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
 		criteria.createAlias("itens", "i", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("comissoes", "c", JoinType.LEFT_OUTER_JOIN);
+		// criteria.createAlias("comissoes", "c", JoinType.LEFT_OUTER_JOIN);
+		// Remover linhas comentadas
 		criteria.add(Restrictions.eq("codigo", codigo));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return (Venda) criteria.uniqueResult();

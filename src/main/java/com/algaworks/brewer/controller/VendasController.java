@@ -80,7 +80,7 @@ public class VendasController {
 		mv.addObject("valorDesconto", venda.getValorDesconto());
 		mv.addObject("valorTotalItens", tabelaItens.getValorTotal(venda.getUuid()));
 		mv.addObject("statusVenda", StatusVenda.values());
-		mv.addObject("css", venda.getComissoes());
+		//mv.addObject("css", venda.getComissoes());
 
 		return mv;
 	}

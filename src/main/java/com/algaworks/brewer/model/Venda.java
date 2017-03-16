@@ -7,10 +7,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -66,14 +64,14 @@ public class Venda {
 	@Enumerated(EnumType.STRING)
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)//, orphanRemoval = true)
 	private List<ItemVenda> itens = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
-	private Set<Comissao> comissoes = new HashSet<>();
-	
-	@Transient
-	private Comissao comissao;
+//	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+//	private Set<Comissao> comissoes = new HashSet<>();
+//	
+//	@Transient
+//	private Comissao comissao;
 
 	@Transient
 	private String uuid;
@@ -86,6 +84,12 @@ public class Venda {
 	@Transient
 	private LocalTime horarioEntrega;
 
+	public Venda(Long codigo) {
+		this.codigo = codigo;
+	}
+	
+	public Venda() {}
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -271,20 +275,20 @@ public class Venda {
 		return true;
 	}
 
-	public Set<Comissao> getComissoes() {
-		return comissoes;
-	}
-
-	public void setComissoes(Set<Comissao> comissoes) {
-		this.comissoes = comissoes;
-	}
-
-	public Comissao getComissao() {
-		return comissao;
-	}
-
-	public void setComissao(Comissao comissao) {
-		this.comissao = comissao;
-	}
+//	public Set<Comissao> getComissoes() {
+//		return comissoes;
+//	}
+//
+//	public void setComissoes(Set<Comissao> comissoes) {
+//		this.comissoes = comissoes;
+//	}
+//
+//	public Comissao getComissao() {
+//		return comissao;
+//	}
+//
+//	public void setComissao(Comissao comissao) {
+//		this.comissao = comissao;
+//	}
 	
 }
