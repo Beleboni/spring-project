@@ -2,47 +2,52 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:data="http://www.thymeleaf.org/extras/data">
-
-	<div class="bw-tabela-item  js-tabela-item" th:each="item : ${itens}" data:valor-total="${valorTotal}">
-		<div class="bw-tabela-item__coluna  bw-tabela-item__coluna--foto">
-			<i class="glyphicon  glyphicon-shopping-cart"></i> 
-			<!--  <img th:src="${item.cerveja.urlThumbnailFoto}" class="img-responsive"/>-->
-		</div>
-		
-		<div class="bw-tabela-item__coluna  bw-tabela-item__coluna--detalhes">
-			<span class="bw-tabela-cerveja-nome" th:text="${item.cerveja.nome}">Negra Modelo Long Neck 355ml</span>
-			<span class="label  label-default" th:text="${item.cerveja.sku}">AA1112</span>
-			<span class="bw-tabela-cerveja-origem" th:text="${item.cerveja.origem.descricao}">Importada</span>
-			<input type="text" class="col-md-12 js-tabela-cerveja-observacao-item" th:value="${item.observacoes}" 
-				data:codigo-cerveja="${item.cerveja.codigo}" placeholder="Observações..." th:disabled="${venda != null ? venda.salvarProibido : false}">
-		</div>
-		
-		<div class="bw-tabela-item__coluna  bw-tabela-item__coluna--valores">
-			<div class="bw-tabela-cerveja-valor-pequeno">
-				<input type="text" maxlength="5" 
-					class="bw-tabela-cerveja-campo-quantidade  js-tabela-cerveja-quantidade-item" 
-					th:value="${item.quantidade}" data:codigo-cerveja="${item.cerveja.codigo}"
-					th:disabled="${venda != null ? venda.salvarProibido : false}"/>
-				
-				<span> x R$ </span>					
-				<input type="text" style="width: 200px;"
-					class="bw-tabela-cerveja-campo-quantidade js-decimal js-tabela-cerveja-valor-item" 
-					th:value="${item.valorUnitario}" data:codigo-cerveja="${item.cerveja.codigo}"
-					th:disabled="${venda != null ? venda.salvarProibido : false}"/>
-				<!-- <span>x R$[[${{item.valorUnitario}}]]</span> -->
-			</div>
-			<div class="bw-tabela-cerveja-valor-grande">R$ [[${{item.valorTotal}}]]</div>
-		</div>
-		
-		<div class="bw-tabela-item__painel-exclusao" th:if="${venda != null ? venda.salvarPermitido : false}">
-			<span class="bw-tabela-item__titulo-exclusao">Excluir este item da venda?</span>
-			<button type="button" class="btn  btn-danger  js-exclusao-item-btn"
-				data:codigo-cerveja="${item.cerveja.codigo}">Sim, excluir!</button>
-		</div>
-	</div>
 	
-	<div class="bw-tabela-cervejas__vazio" th:if="${itens.empty}">
-		<i class="glyphicon  glyphicon-shopping-cart"></i> 
-		<span>Você ainda não adicionou nenhuma cerveja.</span>
-	</div>
+	<div class="row">
+		
+		<div class="table table-responsive">
+			<table class="table">
+				<thead>
+					<th>#</th>
+					<th>Produto/Observação</th>
+					<th>Unidade</th>
+					<th>Quantidade</th>
+					<th>Total</th>
+				</thead>
+				<tbody>
+					<tr class="js-tabela-item" th:each="item : ${itens}" data:valor-total="${valorTotal}">
+						<td>
+							<span class="label  label-default" th:text="${item.cerveja.sku}">AA1112</span>
+						</td>
+						<td>
+							<span th:text="${item.cerveja.nome}">Negra Modelo Long Neck 355ml</span>
+							<input type="text" class="col-md-12 js-tabela-cerveja-observacao-item" th:value="${item.observacoes}" 
+								data:codigo-cerveja="${item.cerveja.codigo}" placeholder="Observações..." th:disabled="${venda != null ? venda.salvarProibido : false}">
+						</td>	
+						<td>
+							<input type="text" maxlength="5" 
+								class="js-tabela-cerveja-quantidade-item" 
+								th:value="${item.quantidade}" data:codigo-cerveja="${item.cerveja.codigo}"
+								th:disabled="${venda != null ? venda.salvarProibido : false}"/>						
+						</td>
+						<td>
+							<input type="text" style="width: 200px;"
+								class="js-decimal js-tabela-cerveja-valor-item" 
+								th:value="${item.valorUnitario}" data:codigo-cerveja="${item.cerveja.codigo}"
+								th:disabled="${venda != null ? venda.salvarProibido : false}"/>						
+						</td>
+						<td>
+							R$ [[${{item.valorTotal}}]]
+						</td>			
+					</tr>
+					<tr>
+						<td th:if="${itens.empty}">
+							<i class="glyphicon  glyphicon-shopping-cart"></i> 
+							<span>Você ainda não adicionou nenhuma cerveja.</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>	
 </html>

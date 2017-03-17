@@ -64,8 +64,7 @@ public class Venda {
 	@Enumerated(EnumType.STRING)
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
-	// , orphanRemoval = true)
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemVenda> itens = new ArrayList<>();
 
 	// @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
@@ -153,14 +152,10 @@ public class Venda {
 	}
 
 	public void setCliente(Cliente cliente) {
-		// Evita transients ao salvar entidade cliente null
-		if (cliente != null && cliente.getCodigo() != null) {
-			this.cliente = cliente;
-		} else {
-			this.cliente = null;
-		}
+		this.cliente = cliente;
 	}
 
+		
 	public Usuario getUsuario() {
 		return usuario;
 	}

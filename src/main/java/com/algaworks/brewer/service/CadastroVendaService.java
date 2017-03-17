@@ -33,6 +33,10 @@ public class CadastroVendaService {
 		// RuntimeException("Usuário tentando salvar uma venda proibida");
 		// }
 
+		if (venda.getCliente().getCodigo() == null) {
+			venda.setCliente(null);
+		}
+		
 		if (venda.isNova()) {
 			venda.setDataCriacao(LocalDateTime.now());
 		} else {
@@ -60,7 +64,7 @@ public class CadastroVendaService {
 
 		return vendas.saveAndFlush(venda);
 	}
-
+	
 //	private void ajustaComissoes(Venda venda) {
 //		Comissao c = venda.getComissao();
 //		if (c != null) {
