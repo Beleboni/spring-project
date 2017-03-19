@@ -23,37 +23,22 @@ class TabelaItensVenda {
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
 
-	public void adicionarItem(Cerveja cerveja, Integer quantidade, String observacoes) {
-		Optional<ItemVenda> itemVendaOptional = buscarItemPorCerveja(cerveja);
-
-		ItemVenda itemVenda = null;
-		if (itemVendaOptional.isPresent()) {
-			itemVenda = itemVendaOptional.get();
-			itemVenda.setQuantidade(itemVenda.getQuantidade() + quantidade);
-		} else {
-			itemVenda = new ItemVenda();
-			itemVenda.setCerveja(cerveja);
-			itemVenda.setQuantidade(quantidade);
-			itemVenda.setValorUnitario(cerveja.getValor());
-			itemVenda.setObservacoes(observacoes);
-			itens.add(0, itemVenda);
-		}
+	public void adicionarItem(Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
+			ItemVenda itemVenda = new ItemVenda();
+			this.setItemVenda(itemVenda, cerveja, quantidade, valor, observacao);
+			itens.add(itemVenda);
+	}
+	
+	private void setItemVenda(ItemVenda itemVenda, Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
+		itemVenda.setCerveja(cerveja);
+		itemVenda.setQuantidade(quantidade);
+		itemVenda.setValorUnitario(BigDecimal.valueOf(valor));
+		itemVenda.setObservacoes(observacao);
 	}
 
 	public void alterarItens(Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
 		ItemVenda itemVenda = buscarItemPorCerveja(cerveja).get();
-
-		if (quantidade != null) {
-			itemVenda.setQuantidade(quantidade);
-		}
-
-		if (valor != null) {
-			itemVenda.setValorUnitario(BigDecimal.valueOf(valor));
-		}
-		
-		if (observacao != null) {
-			itemVenda.setObservacoes(observacao);
-		}
+		this.setItemVenda(itemVenda, cerveja, quantidade, valor, observacao);
 	}
 
 	public void excluirItem(Cerveja cerveja) {

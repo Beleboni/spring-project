@@ -78,9 +78,9 @@ public class VendasController {
 		mv.addObject("itens", venda.getItens());
 		mv.addObject("valorFrete", venda.getValorFrete());
 		mv.addObject("valorDesconto", venda.getValorDesconto());
-		mv.addObject("valorTotalItens", tabelaItens.getValorTotal(venda.getUuid()));
+		mv.addObject("valorTotalItens",
+				tabelaItens.getValorTotal(venda.getUuid()));
 		mv.addObject("statusVenda", StatusVenda.values());
-		//mv.addObject("css", venda.getComissoes());
 
 		return mv;
 	}
@@ -133,18 +133,19 @@ public class VendasController {
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
-	@PostMapping("/item")
-	public ModelAndView adicionarItem(Long codigoCerveja, String uuid) {
-		Cerveja cerveja = cervejas.findOne(codigoCerveja);
-		tabelaItens.adicionarItem(uuid, cerveja, 1, null);
+	@PostMapping("/item/{codigoCerveja}/adicionar")
+	public ModelAndView adicionarItem(
+			@PathVariable("codigoCerveja") Cerveja cerveja, Integer quantidade,
+			Float valor, String observacao, String uuid) {
+		tabelaItens.adicionarItem(uuid, cerveja, quantidade, valor, observacao);
 		return mvTabelaItensVenda(uuid);
 	}
 
-	@PutMapping("/item/{codigoCerveja}")
+	@PutMapping("/item/{codigoCerveja}/alterar")
 	public ModelAndView alterarItem(
 			@PathVariable("codigoCerveja") Cerveja cerveja, Integer quantidade,
 			Float valor, String observacao, String uuid) {
-		tabelaItens.alterarItens(uuid, cerveja, quantidade, valor, observacao);
+		tabelaItens.alterarItem(uuid, cerveja, quantidade, valor, observacao);
 		return mvTabelaItensVenda(uuid);
 	}
 
@@ -177,9 +178,10 @@ public class VendasController {
 		setUuid(venda);
 		for (ItemVenda item : venda.getItens()) {
 			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(),
-					item.getQuantidade(), item.getObservacoes());
+					item.getQuantidade(), item.getValorUnitario(),
+					item.getObservacoes());
 		}
-		
+
 		ModelAndView mv = nova(venda);
 		mv.addObject(venda);
 		return mv;

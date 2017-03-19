@@ -6,14 +6,20 @@ Brewer.TabelaItens = (function() {
 		this.uuid = $('#uuid').val();
 		this.emitter = $({});
 		this.on = this.emitter.on.bind(this.emitter);
+		this.modal = $('#itemVenda');
 	}
 	
 	TabelaItens.prototype.iniciar = function() {
 		this.autocomplete.on('item-selecionado', onItemSelecionado.bind(this));
 		
-		bindObservacao.call(this);
-		bindQuantidade.call(this);
-		bindValor.call(this);
+		this.modal.find('form').on('submit', salvarItemSelecionado.bind(this));
+		this.modal.on('hide.bs.modal', function() {
+			$(this).find('form')[0].reset();
+		});
+		
+		// bindObservacao.call(this);
+		// bindQuantidade.call(this);
+		// bindValor.call(this);
 		bindTabelaItem.call(this);
 	}
 	
@@ -21,21 +27,35 @@ Brewer.TabelaItens = (function() {
 		return this.tabelaCervejasContainer.data('valor');
 	}
 	
-	function onItemSelecionado(evento, item) {
+	// Salva ou altera um item selecionado.
+	function salvarItemSelecionado(evento) {		
+		evento.preventDefault();
+		evento.stopPropagation();
+		
+		var action = this.modal.data('action');
+		var codigoCerveja = this.modal.find('#codigo').val();
 		var resposta = $.ajax({
-			url: 'item',
-			method: 'POST',
-			data: {
-				codigoCerveja: item.codigo,
-				uuid: this.uuid
-			}
-		});
+			url: 'item/' + codigoCerveja + '/' + action,
+			method: action == 'adicionar' ? 'post' : 'put', 
+			data: this.modal.find('form').serialize()
+		});	
 		
 		resposta.done(onItemAtualizadoNoServidor.bind(this));
 	}
 	
+	// Abre modal com os dados do item.
+	function onItemSelecionado(evento, item) {
+		this.modal.attr('data-action', 'adicionar');
+		this.modal.find('#codigo').val(item.codigo);
+		this.modal.find('#sku').val(item.sku);
+		this.modal.find('#descricao').val(item.nome);
+		this.modal.find('#valor').val(item.valor);
+		this.modal.modal('show');
+	}
+	
 	function onItemAtualizadoNoServidor(html) {
 		this.tabelaCervejasContainer.html(html);
+		this.modal.modal('hide');
 		
 		bindObservacao.call(this);
 		bindQuantidade.call(this);

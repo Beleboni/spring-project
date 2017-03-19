@@ -8,36 +8,36 @@
 		<div class="table table-responsive">
 			<table class="table">
 				<thead>
-					<th>#</th>
-					<th>Produto/Observação</th>
-					<th>Unidade</th>
-					<th>Quantidade</th>
-					<th>Total</th>
+					<tr>
+						<th>#</th>
+						<th>Produto/Observação</th>
+						<th>Unidade</th>
+						<th>Quantidade</th>
+						<th>Total</th>
+						<th>Ações</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr class="js-tabela-item" th:each="item : ${itens}" data:valor-total="${valorTotal}">
 						<td>
-							<span class="label  label-default" th:text="${item.cerveja.sku}">AA1112</span>
+							<span class="label  label-default">[[${{item.cerveja.sku}}]]	</span>
 						</td>
 						<td>
-							<span th:text="${item.cerveja.nome}">Negra Modelo Long Neck 355ml</span>
-							<input type="text" class="col-md-12 js-tabela-cerveja-observacao-item" th:value="${item.observacoes}" 
-								data:codigo-cerveja="${item.cerveja.codigo}" placeholder="Observações..." th:disabled="${venda != null ? venda.salvarProibido : false}">
+							[[${{item.cerveja.nome}}]]
+							[[${{item.observacoes}}]]				
 						</td>	
 						<td>
-							<input type="text" maxlength="5" 
-								class="js-tabela-cerveja-quantidade-item" 
-								th:value="${item.quantidade}" data:codigo-cerveja="${item.cerveja.codigo}"
-								th:disabled="${venda != null ? venda.salvarProibido : false}"/>						
+							[[${{item.quantidade}}]]							
 						</td>
 						<td>
-							<input type="text" style="width: 200px;"
-								class="js-decimal js-tabela-cerveja-valor-item" 
-								th:value="${item.valorUnitario}" data:codigo-cerveja="${item.cerveja.codigo}"
-								th:disabled="${venda != null ? venda.salvarProibido : false}"/>						
+							[[${{item.valorUnitario}}]]				
 						</td>
 						<td>
 							R$ [[${{item.valorTotal}}]]
+						</td>
+						<td>							
+							<a href="#"><i class="glyphicon glyphicon-pencil"></i></a>
+							<a href="#"><i class="fa fa-trash"></i></a>
 						</td>			
 					</tr>
 					<tr>

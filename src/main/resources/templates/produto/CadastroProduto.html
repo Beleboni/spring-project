@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/LayoutPadrao}"
+	xmlns:brewer="http://brewer.algaworks.com">
+
+<head>
+	<title>Cadastro de Produto</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/bootstrap-switch.min.css}"/>
+</head>
+
+<section layout:fragment="conteudo">
+
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-10">
+					<h1>Cadastro de produto</h1>
+				</div>
+				
+				<div class="col-xs-2">
+					<div class="aw-page-header-controls">
+						<a class="btn  btn-default" th:href="@{/produtos}">
+							<i class="glyphicon  glyphicon-plus-sign"></i> <span class="hidden-xs  hidden-sm">Pesquisa</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+		<form method="POST" th:object="${produto}" th:action="@{/produtos/novo}">
+			<brewer:message/>
+			
+			<div class="row">
+				<input type="hidden" th:field="*{codigo}"/>
+				<div class="form-group  col-sm-8  bw-required" brewer:classforerror="nome">
+					<label for="descricao" class="control-label">Nome</label>
+					<input type="text" class="form-control" id="nome" th:field="*{nome}"/>
+				</div>
+				<div class="form-group  col-sm-8  bw-required" brewer:classforerror="valor">
+					<label for="descricao" class="control-label">Valor unitario</label>
+					<input type="text" class="form-control" id="valor" th:field="*{valor}"/>
+				</div>
+				<div class="form-group  col-sm-4  bw-required" brewer:classforerror="representada">
+					<label for="estado" class="control-label">Representada</label>
+					<select id="estado" class="form-control" th:field="*{representada}">
+	                    <option value="">Selecione o estado</option>
+	                    <option th:each="representada : ${representadas}" th:value="${representada.codigo}" th:text="${representada.nome}"></option>
+	                </select>
+				</div>	
+			</div>
+			
+			<button type="submit" class="btn  btn-primary">Salvar</button>
+		</form>
+	</div>
+</section>
+
+<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/vendors/bootstrap-switch.min.js}"></script>
+	<script>
+		$('.js-status').bootstrapSwitch();
+	</script>
+</th:block>
+</html>

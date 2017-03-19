@@ -67,12 +67,6 @@ public class Venda {
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemVenda> itens = new ArrayList<>();
 
-	// @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
-	// private Set<Comissao> comissoes = new HashSet<>();
-	//
-	// @Transient
-	// private Comissao comissao;
-
 	@Transient
 	private String uuid;
 

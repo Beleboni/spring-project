@@ -1,5 +1,6 @@
 package com.algaworks.brewer.session;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,13 +17,17 @@ public class TabelasItensSession {
 
 	private Set<TabelaItensVenda> tabelas = new HashSet<>();
 
-	public void adicionarItem(String uuid, Cerveja cerveja, int quantidade, String observacoes) {
+	public void adicionarItem(String uuid, Cerveja cerveja, Integer quantidade, Float valor, String observacoes) {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
-		tabela.adicionarItem(cerveja, quantidade, observacoes);
+		tabela.adicionarItem(cerveja, quantidade, valor, observacoes);
 		tabelas.add(tabela);
 	}
+	
+	public void adicionarItem(String uuid, Cerveja cerveja, Integer quantidade, BigDecimal valor, String observacoes) {
+		this.adicionarItem(uuid, cerveja, quantidade, valor.floatValue(), observacoes);
+	}
 
-	public void alterarItens(String uuid, Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
+	public void alterarItem(String uuid, Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
 		tabela.alterarItens(cerveja, quantidade, valor, observacao);
 	}
