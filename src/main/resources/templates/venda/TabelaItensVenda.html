@@ -20,25 +20,25 @@
 				<tbody>
 					<tr class="js-tabela-item" th:each="item : ${itens}" data:valor-total="${valorTotal}">
 						<td>
-							<span class="label  label-default">[[${{item.cerveja.sku}}]]	</span>
+							<span class="label  label-default sku">[[${{item.cerveja.sku}}]]</span>
 						</td>
 						<td>
-							[[${{item.cerveja.nome}}]]
-							[[${{item.observacoes}}]]				
+							<span class="descricao">[[${{item.cerveja.nome}}]]</span>
+							<div class="text-muted small observacao">[[${{item.observacoes}}]]</div>
 						</td>	
-						<td>
+						<td class="quantidade">
 							[[${{item.quantidade}}]]							
 						</td>
-						<td>
+						<td class="valor">
 							[[${{item.valorUnitario}}]]				
 						</td>
 						<td>
 							R$ [[${{item.valorTotal}}]]
 						</td>
-						<td>							
-							<a href="#"><i class="glyphicon glyphicon-pencil"></i></a>
-							<a href="#"><i class="fa fa-trash"></i></a>
-						</td>			
+						<td>
+							<a href="#alterar" class="btn-alterar" th:attr="data-codigo=${item.cerveja.codigo},data-uuid=${item.uuid}"><i class="fa fa-pencil fa-fw"></i></a>
+							<a href="#"><i class="fa fa-trash fa-fw text-danger"></i></a>
+						</td>
 					</tr>
 					<tr>
 						<td th:if="${itens.empty}">

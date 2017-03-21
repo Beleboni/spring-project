@@ -27,9 +27,9 @@ public class TabelasItensSession {
 		this.adicionarItem(uuid, cerveja, quantidade, valor.floatValue(), observacoes);
 	}
 
-	public void alterarItem(String uuid, Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
+	public void alterarItem(String uuid, Cerveja cerveja, String uuidItem, Integer quantidade, Float valor, String observacao) {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
-		tabela.alterarItens(cerveja, quantidade, valor, observacao);
+		tabela.alterarItens(cerveja, uuidItem ,quantidade, valor, observacao);
 	}
 
 	public void excluirItem(String uuid, Cerveja cerveja) {

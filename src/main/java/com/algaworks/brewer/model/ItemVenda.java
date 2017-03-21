@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "item_venda")
@@ -20,7 +21,7 @@ public class ItemVenda {
 	private Long codigo;
 
 	private Integer quantidade;
-	
+
 	private String observacoes;
 
 	@Column(name = "valor_unitario")
@@ -33,6 +34,17 @@ public class ItemVenda {
 	@ManyToOne
 	@JoinColumn(name = "codigo_venda")
 	private Venda venda;
+
+	@Transient
+	private String uuid;
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
 	public Long getCodigo() {
 		return codigo;

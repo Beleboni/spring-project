@@ -75,7 +75,7 @@ public class VendasController {
 
 		setUuid(venda);
 
-		mv.addObject("itens", venda.getItens());
+		mv.addObject("itens", tabelaItens.getItens(venda.getUuid()));
 		mv.addObject("valorFrete", venda.getValorFrete());
 		mv.addObject("valorDesconto", venda.getValorDesconto());
 		mv.addObject("valorTotalItens",
@@ -144,8 +144,8 @@ public class VendasController {
 	@PutMapping("/item/{codigoCerveja}/alterar")
 	public ModelAndView alterarItem(
 			@PathVariable("codigoCerveja") Cerveja cerveja, Integer quantidade,
-			Float valor, String observacao, String uuid) {
-		tabelaItens.alterarItem(uuid, cerveja, quantidade, valor, observacao);
+			Float valor, String observacao, String uuid, String uuidItem) {
+		tabelaItens.alterarItem(uuid, cerveja, uuidItem, quantidade, valor, observacao);
 		return mvTabelaItensVenda(uuid);
 	}
 
@@ -181,7 +181,7 @@ public class VendasController {
 					item.getQuantidade(), item.getValorUnitario(),
 					item.getObservacoes());
 		}
-
+		
 		ModelAndView mv = nova(venda);
 		mv.addObject(venda);
 		return mv;

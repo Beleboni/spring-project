@@ -16,10 +16,7 @@ Brewer.TabelaItens = (function() {
 		this.modal.on('hide.bs.modal', function() {
 			$(this).find('form')[0].reset();
 		});
-		
-		// bindObservacao.call(this);
-		// bindQuantidade.call(this);
-		// bindValor.call(this);
+		bindAlterar.call(this);
 		bindTabelaItem.call(this);
 	}
 	
@@ -32,11 +29,10 @@ Brewer.TabelaItens = (function() {
 		evento.preventDefault();
 		evento.stopPropagation();
 		
-		var action = this.modal.data('action');
-		var codigoCerveja = this.modal.find('#codigo').val();
+		var _form = this.modal.find('form');
 		var resposta = $.ajax({
-			url: 'item/' + codigoCerveja + '/' + action,
-			method: action == 'adicionar' ? 'post' : 'put', 
+			url: _form.attr('action'),
+			method: _form.attr('method'), 
 			data: this.modal.find('form').serialize()
 		});	
 		
@@ -45,7 +41,8 @@ Brewer.TabelaItens = (function() {
 	
 	// Abre modal com os dados do item.
 	function onItemSelecionado(evento, item) {
-		this.modal.attr('data-action', 'adicionar');
+		this.modal.find('form').attr('action', 'item/' + item.codigo + '/adicionar');
+		this.modal.find('form').attr('method', 'post');
 		this.modal.find('#codigo').val(item.codigo);
 		this.modal.find('#sku').val(item.sku);
 		this.modal.find('#descricao').val(item.nome);
@@ -57,9 +54,7 @@ Brewer.TabelaItens = (function() {
 		this.tabelaCervejasContainer.html(html);
 		this.modal.modal('hide');
 		
-		bindObservacao.call(this);
-		bindQuantidade.call(this);
-		bindValor.call(this);
+		bindAlterar.call(this);
 		
 		var tabelaItem = bindTabelaItem.call(this); 
 		this.emitter.trigger('tabela-itens-atualizada', tabelaItem.data('valor-total'));
@@ -165,6 +160,23 @@ Brewer.TabelaItens = (function() {
 		$('.js-exclusao-item-btn').on('click', onExclusaoItemClick.bind(this));
 		return tabelaItem;
 	}
+	
+	function bindAlterar() {
+		var _modal = this.modal;
+		$('.btn-alterar').on('click', function() {
+			var _tr = $(this).closest('tr');
+			_modal.find('form').attr('action', 'item/' + $(this).data('codigo') + '/alterar');
+			_modal.find('form').attr('method', 'put');
+			_modal.find('#uuidItem').val($(this).data('uuid'));
+			_modal.find('#codigo').val($(this).data('codigo'));
+			_modal.find('#sku').val(_tr.find('.sku').text());
+			_modal.find('#descricao').val(_tr.find('.descricao').text());
+			_modal.find('#obs').val(_tr.find('.observacao').text());
+			_modal.find('#quantidade').val(_tr.find('.quantidade').text().trim());
+			_modal.find('#valor').val(Brewer.recuperarValor(_tr.find('.valor').text()));
+			_modal.modal('show');
+		});
+	}  
 	
 	return TabelaItens;
 	

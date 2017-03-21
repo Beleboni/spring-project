@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 import com.algaworks.brewer.model.Cerveja;
@@ -23,21 +24,25 @@ class TabelaItensVenda {
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
 
-	public void adicionarItem(Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
-			ItemVenda itemVenda = new ItemVenda();
-			this.setItemVenda(itemVenda, cerveja, quantidade, valor, observacao);
-			itens.add(itemVenda);
+	public void adicionarItem(Cerveja cerveja, Integer quantidade, Float valor,
+			String observacao) {
+		ItemVenda itemVenda = new ItemVenda();
+		itemVenda.setUuid(UUID.randomUUID().toString());
+		this.setItemVenda(itemVenda, cerveja, quantidade, valor, observacao);
+		itens.add(itemVenda);
 	}
-	
-	private void setItemVenda(ItemVenda itemVenda, Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
+
+	private void setItemVenda(ItemVenda itemVenda, Cerveja cerveja,
+			Integer quantidade, Float valor, String observacao) {
 		itemVenda.setCerveja(cerveja);
 		itemVenda.setQuantidade(quantidade);
 		itemVenda.setValorUnitario(BigDecimal.valueOf(valor));
 		itemVenda.setObservacoes(observacao);
 	}
 
-	public void alterarItens(Cerveja cerveja, Integer quantidade, Float valor, String observacao) {
-		ItemVenda itemVenda = buscarItemPorCerveja(cerveja).get();
+	public void alterarItens(Cerveja cerveja, String uuidItem, Integer quantidade,
+			Float valor, String observacao) {
+		ItemVenda itemVenda = buscarItemPorUuid(uuidItem).get();
 		this.setItemVenda(itemVenda, cerveja, quantidade, valor, observacao);
 	}
 
@@ -56,9 +61,8 @@ class TabelaItensVenda {
 		return itens;
 	}
 
-	private Optional<ItemVenda> buscarItemPorCerveja(Cerveja cerveja) {
-		return itens.stream().filter(i -> i.getCerveja().equals(cerveja))
-				.findAny();
+	private Optional<ItemVenda> buscarItemPorUuid(String uuid) {
+		return itens.stream().filter(i -> i.getUuid().equals(uuid)).findAny();
 	}
 
 	public String getUuid() {
