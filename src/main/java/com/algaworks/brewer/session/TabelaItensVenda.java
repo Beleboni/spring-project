@@ -46,9 +46,9 @@ class TabelaItensVenda {
 		this.setItemVenda(itemVenda, cerveja, quantidade, valor, observacao);
 	}
 
-	public void excluirItem(Cerveja cerveja) {
+	public void excluirItem(String uuidItem) {
 		int indice = IntStream.range(0, itens.size())
-				.filter(i -> itens.get(i).getCerveja().equals(cerveja))
+				.filter(i -> itens.get(i).getUuid().equals(uuidItem))
 				.findAny().getAsInt();
 		itens.remove(indice);
 	}

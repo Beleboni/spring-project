@@ -32,9 +32,9 @@ public class TabelasItensSession {
 		tabela.alterarItens(cerveja, uuidItem ,quantidade, valor, observacao);
 	}
 
-	public void excluirItem(String uuid, Cerveja cerveja) {
+	public void excluirItem(String uuid, String uuidItem) {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
-		tabela.excluirItem(cerveja);
+		tabela.excluirItem(uuidItem);
 	}
 
 	public List<ItemVenda> getItens(String uuid) {
