@@ -118,6 +118,12 @@ Brewer.TabelaItens = (function() {
 				_modal.modal('show');
 		});
 	}
+	
+	//Bind
+	function bindTabelaItem() {
+		var tabelaItem = $('.js-tabela-item');
+		return tabelaItem;
+	}
 		
 	return TabelaItens;
 	

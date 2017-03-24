@@ -61,6 +61,8 @@ public class Cliente implements Serializable {
 	@Embedded
 	private Endereco endereco;
 	
+	private boolean ativo;
+	
 	@PrePersist @PreUpdate
 	private void prePersistPreUpdate() {
 		this.cpfOuCnpj = TipoPessoa.removerFormatacao(this.cpfOuCnpj);
@@ -129,6 +131,15 @@ public class Cliente implements Serializable {
 	
 	public String getCpfOuCnpjSemFormatacao() {
 		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
+	}
+	
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	@Override

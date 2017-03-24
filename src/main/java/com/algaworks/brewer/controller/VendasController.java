@@ -84,8 +84,8 @@ public class VendasController {
 
 		return mv;
 	}
-
-	@PostMapping(value = "/nova", params = "salvar")
+	
+	@PostMapping("/nova")
 	public ModelAndView salvar(Venda venda, BindingResult result,
 			RedirectAttributes attributes) {
 		validarVenda(venda, result);
@@ -97,41 +97,53 @@ public class VendasController {
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
-	@PostMapping(value = "/nova", params = "emitir")
-	public ModelAndView emitir(Venda venda, BindingResult result,
-			RedirectAttributes attributes,
-			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
-		validarVenda(venda, result);
-		if (result.hasErrors()) {
-			return nova(venda);
-		}
+//	@PostMapping(value = "/nova", params = "salvar")
+//	public ModelAndView salvar(Venda venda, BindingResult result,
+//			RedirectAttributes attributes) {
+//		validarVenda(venda, result);
+//		if (result.hasErrors()) {
+//			return nova(venda);
+//		}
+//		cadastroVendaService.salvar(venda);
+//		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
+//		return new ModelAndView("redirect:/vendas/nova");
+//	}
 
-		venda.setUsuario(usuarioSistema.getUsuario());
-
-		cadastroVendaService.emitir(venda);
-		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso");
-		return new ModelAndView("redirect:/vendas/nova");
-	}
-
-	@PostMapping(value = "/nova", params = "enviarEmail")
-	public ModelAndView enviarEmail(Venda venda, BindingResult result,
-			RedirectAttributes attributes,
-			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
-		validarVenda(venda, result);
-		if (result.hasErrors()) {
-			return nova(venda);
-		}
-
-		venda.setUsuario(usuarioSistema.getUsuario());
-
-		venda = cadastroVendaService.salvar(venda);
-		mailer.enviar(venda);
-
-		attributes.addFlashAttribute("mensagem", String.format(
-				"Venda nº %d salva com sucesso e e-mail enviado",
-				venda.getCodigo()));
-		return new ModelAndView("redirect:/vendas/nova");
-	}
+//	@PostMapping(value = "/nova", params = "emitir")
+//	public ModelAndView emitir(Venda venda, BindingResult result,
+//			RedirectAttributes attributes,
+//			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+//		validarVenda(venda, result);
+//		if (result.hasErrors()) {
+//			return nova(venda);
+//		}
+//
+//		venda.setUsuario(usuarioSistema.getUsuario());
+//
+//		cadastroVendaService.emitir(venda);
+//		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso");
+//		return new ModelAndView("redirect:/vendas/nova");
+//	}
+//
+//	@PostMapping(value = "/nova", params = "enviarEmail")
+//	public ModelAndView enviarEmail(Venda venda, BindingResult result,
+//			RedirectAttributes attributes,
+//			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+//		validarVenda(venda, result);
+//		if (result.hasErrors()) {
+//			return nova(venda);
+//		}
+//
+//		venda.setUsuario(usuarioSistema.getUsuario());
+//
+//		venda = cadastroVendaService.salvar(venda);
+//		mailer.enviar(venda);
+//
+//		attributes.addFlashAttribute("mensagem", String.format(
+//				"Venda nº %d salva com sucesso e e-mail enviado",
+//				venda.getCodigo()));
+//		return new ModelAndView("redirect:/vendas/nova");
+//	}
 
 	@PostMapping("/item/{codigoCerveja}/adicionar")
 	public ModelAndView adicionarItem(

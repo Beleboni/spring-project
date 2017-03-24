@@ -5,6 +5,7 @@
 			<tr>
 				<th class="col-sm-2">Nome</th>
 				<th class="col-sm-2">Telefone</th>
+				<th class="col-sm-2">Status</th>
 			</tr>
 		</thead>
 				
@@ -14,6 +15,13 @@
 					<tr data-codigo="{{codigo}}" data-nome="{{nome}}" class="js-cliente-pesquisa-rapida">
 						<td>{{nome}}</td>
 						<td>{{telefone}}</td>
+						<td>
+							{{#if ativo}}
+								<span class="label label-success">Ativo</span>
+							{{else}}
+								<span class="label label-danger">Inativo</span>
+							{{/if}}
+						</td>
  					</tr>
 				{{/each}}
 			{{else}}

@@ -6,6 +6,7 @@ public class PeriodoRelatorio {
 
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
+	private Long codigoCliente;
 
 	public LocalDate getDataInicio() {
 		return dataInicio;
@@ -22,5 +23,14 @@ public class PeriodoRelatorio {
 	public void setDataFim(LocalDate dataFim) {
 		this.dataFim = dataFim;
 	}
+
+	public Long getCodigoCliente() {
+		return codigoCliente;
+	}
+
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
+	}
+	
 
 }

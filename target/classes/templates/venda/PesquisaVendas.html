@@ -124,6 +124,10 @@
 		   							th:href="@{/comissoes/{codigo}(codigo=${venda.codigo})}">
 		   						<i class="fa fa-percent"></i>
 		   					</a>
+		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Relatorio" 
+		   							th:href="@{/relatorios/pedidoPronto/{codigo}(codigo=${venda.codigo})}">
+		   						<i class="fa fa-printer"></i>
+		   					</a>
 	                 	</td>
 	                </tr>
 	                
