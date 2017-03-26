@@ -64,7 +64,7 @@ public class Venda {
 	@Enumerated(EnumType.STRING)
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
 	private List<ItemVenda> itens = new ArrayList<>();
 
 	@Transient

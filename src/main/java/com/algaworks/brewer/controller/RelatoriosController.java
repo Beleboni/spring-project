@@ -80,7 +80,6 @@ public class RelatoriosController {
 		
 		parametros.put("format", "pdf");
 		parametros.put("codigoVenda", codigo);
-		parametros.put("relatorio_item_pedido", arg1)
 		return new ModelAndView("relatorio_pedido_pronto", parametros);
 	}
 

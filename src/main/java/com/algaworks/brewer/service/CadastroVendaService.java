@@ -14,17 +14,29 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
+import com.algaworks.brewer.repository.Comissoes;
+import com.algaworks.brewer.repository.ItensVenda;
 import com.algaworks.brewer.repository.Vendas;
 import com.algaworks.brewer.service.event.venda.VendaEvent;
+import com.algaworks.brewer.session.TabelasItensSession;
 
 @Service
 public class CadastroVendaService {
 
 	@Autowired
 	private Vendas vendas;
+	
+	@Autowired
+	private Comissoes comissoes;
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	@Autowired
+	private TabelasItensSession tabelaItens;
+	
+	@Autowired
+	private ItensVenda itensVenda;
 
 	@Transactional
 	public Venda salvar(Venda venda) {
@@ -33,6 +45,8 @@ public class CadastroVendaService {
 		// RuntimeException("Usuário tentando salvar uma venda proibida");
 		// }
 
+		this.ajustaItensVenda(venda);
+		
 		if (venda.getCliente().getCodigo() == null) {
 			venda.setCliente(null);
 		}
@@ -63,6 +77,13 @@ public class CadastroVendaService {
 		}
 
 		return vendas.saveAndFlush(venda);
+	}
+	
+	private void ajustaItensVenda(Venda venda) {
+		if (!venda.isNova()) {
+			itensVenda.delete(itensVenda.findByVenda(venda));
+		}
+		venda.adicionarItens(tabelaItens.getItens(venda.getUuid()));
 	}
 	
 //	private void ajustaComissoes(Venda venda) {

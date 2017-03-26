@@ -97,8 +97,6 @@
 							th:field="*{valorDesconto}" data:valor="${valorDesconto}" th:disabled="${venda.salvarProibido}"/>
 					</div>
 				</div> -->
-			</div>
-			<div class="row">
 				<div class="form-group  col-sm-4  bw-required" brewer:classforerror="venda.usuario.codigo">
 					<label class="control-label" for="nomeUsuario">Vendedor</label>
 					<div class="input-group">
@@ -115,87 +113,88 @@
 				</div>
 			</div>
 			
-			<div class="row">
-				<div class="form-group  col-lg-12">
-					<ul class="nav nav-tabs  js-abas-venda">
-					  <li role="presentation"><a href="#comissao">Comissões</a></li>
-					</ul>
-				</div>
-			</div>
-			
-			<div class="tab-content">
-							
-					<div class="tab-pane" id="comissao">
+			<div class="row" th:if="${exibeCampos}">
+				<div class="col-md-12">	
+					<h1>Entrada de comissões</h1>	
+					<form method="POST" th:action="@{/comissoes/salvar}" th:object="${comissao}">
+						<brewer:message/>
+						
+						<input type="hidden" th:field="*{venda}"/>
+						<input type="hidden" th:field="*{totalVenda}"/>
+						
+						<div class="row">
+							<div class="form-group  col-sm-4">
+								<label class="control-label" for="totalEntregue">Entrada da venda</label>
+								<div class="input-group">
+				      				<div class="input-group-addon">R$</div> 
+									<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="totalEntregue" 
+										th:field="*{totalEntregue}" />
+								</div>
+							</div>
+							<div class="form-group  col-sm-4">
+								<label class="control-label" for="porcentagemVendedor">Comissão vendedor</label>
+								<div class="input-group">
+				      				<div class="input-group-addon">%</div> 
+									<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="porcentagemVendedor" 
+										th:field="*{percentual}" />
+								</div>
+							</div>
+							<div class="form-group  col-sm-4">
+								<label class="control-label" for="valor-comissao">Total da comissão</label>
+								<div class="input-group">
+				      				<div class="input-group-addon">R$</div> 
+									<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPorcentagemVendedor" disabled="disabled"/>
+								</div>
+							</div>
+						</div>
 					
-						<form method="POST" th:action="@{/comissoes/salvar}" th:object="${comissao}">
-							<brewer:message/>
-							
-							<input type="hidden" th:field="*{venda}"/>
-							<input type="hidden" th:field="*{totalVenda}"/>
-							
-							<div class="row">
-								<div class="form-group  col-sm-4">
-									<label class="control-label" for="totalEntregue">Entrada da venda</label>
-									<div class="input-group">
-					      				<div class="input-group-addon">R$</div> 
-										<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="totalEntregue" 
-											th:field="*{totalEntregue}" th:disabled="${venda.naoCadastraComissao}"/>
-									</div>
-								</div>
-								<div class="form-group  col-sm-4">
-									<label class="control-label" for="porcentagemVendedor">Comissão vendedor</label>
-									<div class="input-group">
-					      				<div class="input-group-addon">%</div> 
-										<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="porcentagemVendedor" 
-											th:field="*{percentual}" />
-									</div>
-								</div>
-								<div class="form-group  col-sm-4">
-									<label class="control-label" for="valor-comissao">Total da comissão</label>
-									<div class="input-group">
-					      				<div class="input-group-addon">R$</div> 
-										<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPorcentagemVendedor" disabled="disabled"/>
-									</div>
+						<div class="row">
+							<div class="form-group  col-sm-4">
+								<label class="control-label" for="porcentagemRepresentada">Comissão Representada</label>
+								<div class="input-group">
+				      				<div class="input-group-addon">%</div> 
+									<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="porcentagemRepresentada" 
+										th:name="*{percentual}" />
 								</div>
 							</div>
-							
-							<div class="row">
-								<div class="form-group  col-sm-4">
-									<label class="control-label" for="porcentagemRepresentada">Comissão Representada</label>
-									<div class="input-group">
-					      				<div class="input-group-addon">%</div> 
-										<input type="text" maxlength="14" class="form-control  js-decimal field-calc" id="porcentagemRepresentada" 
-											th:name="*{percentual}" />
-									</div>
-								</div>
-								<div class="form-group  col-sm-4">
-									<label class="control-label" for="totalPorcentagemRepresentada">Total da comissão</label>
-									<div class="input-group">
-					      				<div class="input-group-addon">R$</div> 
-										<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPorcentagemRepresentada" disabled="disabled"/>
-									</div>
+							<div class="form-group  col-sm-4">
+								<label class="control-label" for="totalPorcentagemRepresentada">Total da comissão</label>
+								<div class="input-group">
+				      				<div class="input-group-addon">R$</div> 
+									<input type="text" maxlength="14" class="form-control  js-decimal" id="totalPorcentagemRepresentada" disabled="disabled"/>
 								</div>
 							</div>
-							
-							<button type="submit" class="btn  btn-primary">Salvar</button>	
-					</form>					
-			
-			
-				<div class="row"  th:each="comissao : ${comissoes}">
-					<div class="col-sm-12">
-					[[${comissao.totalEntregue}]] | [[${comissao.percentual}]] | [[${comissao.total}]]
-					</div>
-				</div>
-		</div>
-									
+						</div>
+						
+					<button type="submit" class="btn  btn-primary">Salvar</button>	
+				</form>		
+			</div>	
 		</div>
 		
+		<div class="row" th:if="${not exibeCampos}">
+			<div class="col-md-12">
+				<div class="alert alert-success" role="alert">Comissão fechadas, pedido entregue com sucesso!</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Comissão deste pedido</h1>
+				
+				<div class="row" th:each="comissao : ${comissoes}">
+					<div class="col-sm-12">
+					[[${comissao.totalEntregue}]] | [[${comissao.percentual}]] | [[${comissao.total}]] | <a th:href="@{/comissoes/excluir/{codigo}(codigo=${comissao.codigo},codVenda=${venda.codigo})}"><i class="fa fa-trash"></i></a>
+					</div>				
+				</div>			  
+			</div>					
+		</div>
 	</div>
 </section>
 
 <th:block layout:fragment="javascript-extra">
 	<script th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
 	<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
+	<script th:src="@{/javascripts/campos.js}"></script>
 	<script>
 	$(function() {
 		$('.js-abas-venda a').click(function (e) {

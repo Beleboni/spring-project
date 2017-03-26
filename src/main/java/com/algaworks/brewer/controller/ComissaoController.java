@@ -1,7 +1,7 @@
 package com.algaworks.brewer.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.model.Comissao;
-import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Comissoes;
 import com.algaworks.brewer.service.CadastroVendaService;
@@ -22,34 +21,51 @@ import com.algaworks.brewer.service.CadastroVendaService;
 @Controller
 @RequestMapping("/comissoes")
 public class ComissaoController {
-		
+
 	@Autowired
 	private CadastroVendaService cadastroVendaService;
 	@Autowired
 	private Comissoes comissoes;
-	
+
 	@GetMapping("/{codigo}")
-	public ModelAndView visualizar(@PathVariable Long codigo){
+	public ModelAndView visualizar(@PathVariable Long codigo) {
+		ModelAndView mv = new ModelAndView("comissao/ComissaoVenda");
+		
 		Venda venda = cadastroVendaService.buscar(codigo);
+		
 		Comissao comissao = new Comissao();
 		comissao.setVenda(venda);
 		comissao.setTotalVenda(venda.getValorTotal());
-		ModelAndView mv = new ModelAndView("comissao/ComissaoVenda");
-		mv.addObject("comissoes", comissoes.findByVenda(venda));
-		mv.addObject(venda);
+		
+		List<Comissao> cms = comissoes.findByVenda(venda);
+
+		Double totalVenda = venda.getValorTotal().doubleValue();
+
+		Double totalComissoes = cms.stream()
+				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum();
+
+		mv.addObject("exibeCampos", !totalVenda.equals(totalComissoes));
+		mv.addObject("comissoes", cms);
 		mv.addObject(comissao);
+		mv.addObject(venda);
 		return mv;
 	}
 	
 	@Transactional
+	@GetMapping("/excluir/{codigo}")
+	public ModelAndView excluir(@PathVariable Long codigo, Long codVenda, RedirectAttributes attributes) {
+		comissoes.delete(codigo);
+		attributes.addFlashAttribute("mensagem", "Comissao excluida com sucesso!");
+		return new ModelAndView("redirect:/comissoes/" + codVenda);
+	}
+
+	@Transactional
 	@PostMapping("/salvar")
 	public ModelAndView salvar(Comissao comissao, RedirectAttributes attributes) {
 		comissao.setDataCriacao(LocalDateTime.now());
-		// comissao.setVenda(new Venda(comissao.getVenda().getCodigo()));
-		comissao.getVenda().setItens(new ArrayList<ItemVenda>());
 		comissoes.save(comissao);
 		attributes.addFlashAttribute("mensagem", "Comissao salva com sucesso");
-		return visualizar(comissao.getVenda().getCodigo());
+		return new ModelAndView("redirect:/comissoes/" + comissao.getVenda().getCodigo());
 	}
-	
+
 }
