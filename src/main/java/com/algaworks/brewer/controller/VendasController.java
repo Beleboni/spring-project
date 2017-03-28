@@ -92,7 +92,7 @@ public class VendasController {
 		if (result.hasErrors()) {
 			return nova(venda);
 		}
-		cadastroVendaService.salvar(venda);
+		cadastroVendaService.salvar(venda, tabelaItens);
 		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
 		return new ModelAndView("redirect:/vendas/nova");
 	}

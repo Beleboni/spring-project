@@ -17,7 +17,6 @@ import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Comissoes;
 import com.algaworks.brewer.repository.ItensVenda;
 import com.algaworks.brewer.repository.Vendas;
-import com.algaworks.brewer.service.event.venda.VendaEvent;
 import com.algaworks.brewer.session.TabelasItensSession;
 
 @Service
@@ -39,13 +38,13 @@ public class CadastroVendaService {
 	private ItensVenda itensVenda;
 
 	@Transactional
-	public Venda salvar(Venda venda) {
+	public Venda salvar(Venda venda, TabelasItensSession itens) {
 		// if (venda.isSalvarProibido()) {
 		// throw new
 		// RuntimeException("Usuário tentando salvar uma venda proibida");
 		// }
 
-		this.ajustaItensVenda(venda);
+		this.ajustaItensVenda(venda, itens);
 		
 		if (venda.getCliente().getCodigo() == null) {
 			venda.setCliente(null);
@@ -79,11 +78,11 @@ public class CadastroVendaService {
 		return vendas.saveAndFlush(venda);
 	}
 	
-	private void ajustaItensVenda(Venda venda) {
+	private void ajustaItensVenda(Venda venda, TabelasItensSession itens) {
 		if (!venda.isNova()) {
 			itensVenda.delete(itensVenda.findByVenda(venda));
 		}
-		venda.adicionarItens(tabelaItens.getItens(venda.getUuid()));
+		venda.adicionarItens(itens.getItens(venda.getUuid()));
 	}
 	
 //	private void ajustaComissoes(Venda venda) {
@@ -99,13 +98,13 @@ public class CadastroVendaService {
 //		}
 //	}
 
-	@Transactional
-	public void emitir(Venda venda) {
-		venda.setStatus(StatusVenda.EMITIDA);
-		salvar(venda);
-
-		publisher.publishEvent(new VendaEvent(venda));
-	}
+//	@Transactional
+//	public void emitir(Venda venda) {
+//		venda.setStatus(StatusVenda.EMITIDA);
+//		salvar(venda);
+//
+//		publisher.publishEvent(new VendaEvent(venda));
+//	}
 
 	@PreAuthorize("#venda.usuario == principal.usuario or hasRole('CANCELAR_VENDA')")
 	@Transactional
