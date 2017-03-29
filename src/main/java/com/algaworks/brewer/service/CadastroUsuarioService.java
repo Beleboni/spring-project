@@ -33,6 +33,11 @@ public class CadastroUsuarioService {
 			throw new SenhaObrigatoriaUsuarioException("Senha é obrigatória para novo usuário");
 		}
 		
+		//REver aqui
+		if (!usuario.isNovo() && !usuarioExistente.isPresent()) {
+			usuarioExistente = Optional.ofNullable(usuarios.findOne(usuario.getCodigo())); 
+		}
+		
 		if (usuario.isNovo() || !StringUtils.isEmpty(usuario.getSenha())) {
 			usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
 		} else if (StringUtils.isEmpty(usuario.getSenha())) {

@@ -35,6 +35,7 @@ import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.model.Venda;
+import com.algaworks.brewer.repository.Bancos;
 import com.algaworks.brewer.repository.Cervejas;
 import com.algaworks.brewer.repository.Vendas;
 import com.algaworks.brewer.repository.filter.VendaFilter;
@@ -60,6 +61,9 @@ public class VendasController {
 
 	@Autowired
 	private Vendas vendas;
+	
+	@Autowired
+	private Bancos bancos;
 
 	@Autowired
 	private Mailer mailer;
@@ -74,7 +78,7 @@ public class VendasController {
 		ModelAndView mv = new ModelAndView("venda/CadastroVenda");
 
 		setUuid(venda);
-
+		mv.addObject("bancos", bancos.findAll());
 		mv.addObject("itens", tabelaItens.getItens(venda.getUuid()));
 		mv.addObject("valorFrete", venda.getValorFrete());
 		mv.addObject("valorDesconto", venda.getValorDesconto());

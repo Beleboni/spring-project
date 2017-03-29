@@ -39,12 +39,6 @@ public class CadastroVendaService {
 
 	@Transactional
 	public Venda salvar(Venda venda, TabelasItensSession itens) {
-		// if (venda.isSalvarProibido()) {
-		// throw new
-		// RuntimeException("Usuário tentando salvar uma venda proibida");
-		// }
-
-		this.ajustaItensVenda(venda, itens);
 		
 		if (venda.getCliente().getCodigo() == null) {
 			venda.setCliente(null);
@@ -53,19 +47,17 @@ public class CadastroVendaService {
 		if (venda.isNova()) {
 			venda.setDataCriacao(LocalDateTime.now());
 		} else {
+			//Rever aqui
 			Venda vendaExistente = vendas.findOne(venda.getCodigo());
 			venda.setDataCriacao(vendaExistente.getDataCriacao());
-
+			vendaExistente.setUuid(venda.getUuid());
+			
 			if (vendaExistente.isPodeAlterarStatus()) {
 				StatusVenda statusNovo = venda.getStatus();
-				//Comissao comissao = venda.getComissao();
 				venda = vendaExistente;
 				venda.setStatus(statusNovo);
-				//venda.setComissao(comissao);
 			}
 		}
-
-		//this.ajustaComissoes(venda);
 
 		// Não existe (não se preocupar)
 		if (venda.getDataEntrega() != null) {
@@ -74,7 +66,10 @@ public class CadastroVendaService {
 					venda.getHorarioEntrega() != null ? venda
 							.getHorarioEntrega() : LocalTime.NOON));
 		}
-
+		
+		//Mudar para baixo
+		this.ajustaItensVenda(venda, itens);
+		
 		return vendas.saveAndFlush(venda);
 	}
 	
@@ -85,26 +80,6 @@ public class CadastroVendaService {
 		venda.adicionarItens(itens.getItens(venda.getUuid()));
 	}
 	
-//	private void ajustaComissoes(Venda venda) {
-//		Comissao c = venda.getComissao();
-//		if (c != null) {
-//			c.setDataCriacao(LocalDateTime.now());
-//			c.setTotalVenda(venda.getValorTotal());
-//			c.setVenda(venda);
-//		
-//			if (c.isValido()) {
-//				venda.getComissoes().add(c);
-//			}
-//		}
-//	}
-
-//	@Transactional
-//	public void emitir(Venda venda) {
-//		venda.setStatus(StatusVenda.EMITIDA);
-//		salvar(venda);
-//
-//		publisher.publishEvent(new VendaEvent(venda));
-//	}
 
 	@PreAuthorize("#venda.usuario == principal.usuario or hasRole('CANCELAR_VENDA')")
 	@Transactional

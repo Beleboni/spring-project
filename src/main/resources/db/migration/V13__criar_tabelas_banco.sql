@@ -1,6 +1,7 @@
 CREATE TABLE banco (
     codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     descricao VARCHAR(300) NOT NULL
+    ativo TINYINT(10) default 1,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

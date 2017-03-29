@@ -58,6 +58,10 @@ public class Venda {
 	private Cliente cliente;
 
 	@ManyToOne
+	@JoinColumn(name = "codigo_banco")
+	private Banco banco;
+	
+	@ManyToOne
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
 
@@ -196,6 +200,14 @@ public class Venda {
 
 	public void setHorarioEntrega(LocalTime horarioEntrega) {
 		this.horarioEntrega = horarioEntrega;
+	}	
+
+	public Banco getBanco() {
+		return banco;
+	}
+
+	public void setBanco(Banco banco) {
+		this.banco = banco;
 	}
 
 	public boolean isNova() {
