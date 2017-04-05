@@ -159,4 +159,8 @@ public class Usuario implements Serializable {
 		return true;
 	}
 	
+	public boolean isAdministrador() {
+		return this.grupos.stream().anyMatch(g -> "Administrador".equals(g.getNome()));
+	}
+	
 }

@@ -10,6 +10,7 @@ CREATE TABLE cliente (
     complemento VARCHAR(20),
     cep VARCHAR(15),
     codigo_cidade BIGINT(20),
+    ativo TINYINT(10) default 1,
     FOREIGN KEY (codigo_cidade) REFERENCES cidade(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

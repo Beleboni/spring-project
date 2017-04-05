@@ -61,7 +61,7 @@ public class VendasController {
 
 	@Autowired
 	private Vendas vendas;
-	
+
 	@Autowired
 	private Bancos bancos;
 
@@ -88,7 +88,7 @@ public class VendasController {
 
 		return mv;
 	}
-	
+
 	@PostMapping("/nova")
 	public ModelAndView salvar(Venda venda, BindingResult result,
 			RedirectAttributes attributes) {
@@ -101,53 +101,53 @@ public class VendasController {
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
-//	@PostMapping(value = "/nova", params = "salvar")
-//	public ModelAndView salvar(Venda venda, BindingResult result,
-//			RedirectAttributes attributes) {
-//		validarVenda(venda, result);
-//		if (result.hasErrors()) {
-//			return nova(venda);
-//		}
-//		cadastroVendaService.salvar(venda);
-//		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
-//		return new ModelAndView("redirect:/vendas/nova");
-//	}
+	// @PostMapping(value = "/nova", params = "salvar")
+	// public ModelAndView salvar(Venda venda, BindingResult result,
+	// RedirectAttributes attributes) {
+	// validarVenda(venda, result);
+	// if (result.hasErrors()) {
+	// return nova(venda);
+	// }
+	// cadastroVendaService.salvar(venda);
+	// attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
+	// return new ModelAndView("redirect:/vendas/nova");
+	// }
 
-//	@PostMapping(value = "/nova", params = "emitir")
-//	public ModelAndView emitir(Venda venda, BindingResult result,
-//			RedirectAttributes attributes,
-//			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
-//		validarVenda(venda, result);
-//		if (result.hasErrors()) {
-//			return nova(venda);
-//		}
-//
-//		venda.setUsuario(usuarioSistema.getUsuario());
-//
-//		cadastroVendaService.emitir(venda);
-//		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso");
-//		return new ModelAndView("redirect:/vendas/nova");
-//	}
-//
-//	@PostMapping(value = "/nova", params = "enviarEmail")
-//	public ModelAndView enviarEmail(Venda venda, BindingResult result,
-//			RedirectAttributes attributes,
-//			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
-//		validarVenda(venda, result);
-//		if (result.hasErrors()) {
-//			return nova(venda);
-//		}
-//
-//		venda.setUsuario(usuarioSistema.getUsuario());
-//
-//		venda = cadastroVendaService.salvar(venda);
-//		mailer.enviar(venda);
-//
-//		attributes.addFlashAttribute("mensagem", String.format(
-//				"Venda nº %d salva com sucesso e e-mail enviado",
-//				venda.getCodigo()));
-//		return new ModelAndView("redirect:/vendas/nova");
-//	}
+	// @PostMapping(value = "/nova", params = "emitir")
+	// public ModelAndView emitir(Venda venda, BindingResult result,
+	// RedirectAttributes attributes,
+	// @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+	// validarVenda(venda, result);
+	// if (result.hasErrors()) {
+	// return nova(venda);
+	// }
+	//
+	// venda.setUsuario(usuarioSistema.getUsuario());
+	//
+	// cadastroVendaService.emitir(venda);
+	// attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso");
+	// return new ModelAndView("redirect:/vendas/nova");
+	// }
+	//
+	// @PostMapping(value = "/nova", params = "enviarEmail")
+	// public ModelAndView enviarEmail(Venda venda, BindingResult result,
+	// RedirectAttributes attributes,
+	// @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+	// validarVenda(venda, result);
+	// if (result.hasErrors()) {
+	// return nova(venda);
+	// }
+	//
+	// venda.setUsuario(usuarioSistema.getUsuario());
+	//
+	// venda = cadastroVendaService.salvar(venda);
+	// mailer.enviar(venda);
+	//
+	// attributes.addFlashAttribute("mensagem", String.format(
+	// "Venda nº %d salva com sucesso e e-mail enviado",
+	// venda.getCodigo()));
+	// return new ModelAndView("redirect:/vendas/nova");
+	// }
 
 	@PostMapping("/item/{codigoCerveja}/adicionar")
 	public ModelAndView adicionarItem(
@@ -161,12 +161,14 @@ public class VendasController {
 	public ModelAndView alterarItem(
 			@PathVariable("codigoCerveja") Cerveja cerveja, Integer quantidade,
 			Float valor, String observacao, String uuid, String uuidItem) {
-		tabelaItens.alterarItem(uuid, cerveja, uuidItem, quantidade, valor, observacao);
+		tabelaItens.alterarItem(uuid, cerveja, uuidItem, quantidade, valor,
+				observacao);
 		return mvTabelaItensVenda(uuid);
 	}
 
 	@DeleteMapping("/item/{uuid}/excluir/{uuidItem}")
-	public ModelAndView excluirItem(@PathVariable String uuid, @PathVariable String uuidItem) {
+	public ModelAndView excluirItem(@PathVariable String uuid,
+			@PathVariable String uuidItem) {
 		tabelaItens.excluirItem(uuid, uuidItem);
 		return mvTabelaItensVenda(uuid);
 	}
@@ -174,13 +176,14 @@ public class VendasController {
 	@GetMapping
 	public ModelAndView pesquisar(VendaFilter vendaFilter,
 			@PageableDefault(size = 10) Pageable pageable,
-			HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest,
+			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
 		ModelAndView mv = new ModelAndView("/venda/PesquisaVendas");
 		mv.addObject("todosStatus", StatusVenda.values());
 		mv.addObject("tiposPessoa", TipoPessoa.values());
 
 		PageWrapper<Venda> paginaWrapper = new PageWrapper<>(vendas.filtrar(
-				vendaFilter, pageable), httpServletRequest);
+				vendaFilter, usuarioSistema.getUsuario(), pageable), httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
 		return mv;
 	}
@@ -195,7 +198,7 @@ public class VendasController {
 					item.getQuantidade(), item.getValorUnitario(),
 					item.getObservacoes());
 		}
-		
+
 		ModelAndView mv = nova(venda);
 		mv.addObject(venda);
 		return mv;

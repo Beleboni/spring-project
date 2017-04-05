@@ -41,8 +41,9 @@ public class UsuariosImpl implements UsuariosQueries {
 	
 	@Override
 	public Optional<Usuario> porEmailEAtivo(String email) {
+		// koko ha
 		return manager
-				.createQuery("from Usuario where lower(email) = lower(:email) and ativo = true", Usuario.class)
+				.createQuery("from Usuario u inner join fetch u.grupos g where lower(u.email) = lower(:email) and u.ativo = true", Usuario.class)
 				.setParameter("email", email).getResultList().stream().findFirst();
 	}
 

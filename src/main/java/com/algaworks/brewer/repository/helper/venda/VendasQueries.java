@@ -8,12 +8,13 @@ import org.springframework.data.domain.Pageable;
 
 import com.algaworks.brewer.dto.VendaMes;
 import com.algaworks.brewer.dto.VendaOrigem;
+import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.filter.VendaFilter;
 
 public interface VendasQueries {
 
-	public Page<Venda> filtrar(VendaFilter filtro, Pageable pageable);
+	public Page<Venda> filtrar(VendaFilter filtro, Usuario usuario, Pageable pageable);
 	
 	public Venda buscarComItens(Long codigo);
 	

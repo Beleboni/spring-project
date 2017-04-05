@@ -29,6 +29,7 @@ import com.algaworks.brewer.dto.VendaMes;
 import com.algaworks.brewer.dto.VendaOrigem;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
+import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.filter.VendaFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
@@ -44,11 +45,15 @@ public class VendasImpl implements VendasQueries {
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	@Override
-	public Page<Venda> filtrar(VendaFilter filtro, Pageable pageable) {
+	public Page<Venda> filtrar(VendaFilter filtro, Usuario usuario, Pageable pageable) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
 		paginacaoUtil.preparar(criteria, pageable);
 		
 		adicionarFiltro(filtro, criteria);
+		
+		if (!usuario.isAdministrador()) {
+			criteria.add(Restrictions.eq("usuario", usuario));
+		}
 		
 		// Test this out.
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
