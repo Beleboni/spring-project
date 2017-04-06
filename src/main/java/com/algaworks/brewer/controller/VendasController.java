@@ -78,7 +78,7 @@ public class VendasController {
 		ModelAndView mv = new ModelAndView("venda/CadastroVenda");
 
 		setUuid(venda);
-		mv.addObject("bancos", bancos.findAll());
+		mv.addObject("bancos", bancos.bancosAtivo(1l));
 		mv.addObject("itens", tabelaItens.getItens(venda.getUuid()));
 		mv.addObject("valorFrete", venda.getValorFrete());
 		mv.addObject("valorDesconto", venda.getValorDesconto());

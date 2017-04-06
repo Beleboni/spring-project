@@ -60,14 +60,18 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
-	
+
+	@Column(name = "codigo_empresa")
+	private Long codEmpresa;
+
 	private boolean ativo;
-	
-	@PrePersist @PreUpdate
+
+	@PrePersist
+	@PreUpdate
 	private void prePersistPreUpdate() {
 		this.cpfOuCnpj = TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
-	
+
 	@PostLoad
 	private void postLoad() {
 		this.cpfOuCnpj = this.tipoPessoa.formatar(this.cpfOuCnpj);
@@ -128,11 +132,18 @@ public class Cliente implements Serializable {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-	
+
 	public String getCpfOuCnpjSemFormatacao() {
 		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
-	
+
+	public Long getCodEmpresa() {
+		return codEmpresa;
+	}
+
+	public void setCodEmpresa(Long codEmpresa) {
+		this.codEmpresa = codEmpresa;
+	}
 
 	public boolean isAtivo() {
 		return ativo;

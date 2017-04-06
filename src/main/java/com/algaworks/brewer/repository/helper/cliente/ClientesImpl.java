@@ -1,5 +1,8 @@
 package com.algaworks.brewer.repository.helper.cliente;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -59,6 +62,14 @@ public class ClientesImpl implements ClientesQueries {
 				criteria.add(Restrictions.eq("cpfOuCnpj", filtro.getCpfOuCnpjSemFormatacao()));
 			}
 		}
+	}
+
+	@Override
+	public List<Cliente> findClientes(String nome, Long codigoEmpresa) {
+		return manager.createQuery("select c from Cliente c where c.nome like ?1 and c.codEmpresa = ?2", Cliente.class)
+				.setParameter(1, "%" + Optional.ofNullable(nome).orElse("") + "%")
+				.setParameter(2, codigoEmpresa)
+				.getResultList();
 	}
 
 }

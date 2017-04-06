@@ -22,14 +22,14 @@ public class CadastroBancoService {
 	private Vendas vendas;
 	
 	@Transactional
-	public void salvar(Banco banco){
+	public Banco salvar(Banco banco){
 		Optional<Banco> bancoExistente = bancos.findByDescricao(banco.getDescricao());
 		
 		if(bancoExistente.isPresent()){
 			throw new DescricaoBancoJaCadastradoException("Descrição do banco já cadastrado");
 		}
 		
-		bancos.save(banco);
+		return bancos.saveAndFlush(banco);
 	}
 	
 	@Transactional

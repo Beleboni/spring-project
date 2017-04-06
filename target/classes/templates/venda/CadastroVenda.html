@@ -178,9 +178,16 @@
 						</div>
 						<div class="form-group col-sm-3">
 							<label class="control-label" for="status">Banco</label>
-							<select class="form-control" name="banco" th:field="*{banco}" th:disabled="${venda.salvarProibido}">
-								<option th:each="banco : ${bancos}" th:value="${banco.codigo}" th:text="${banco.descricao}"></option>
-							</select>
+							<div class="bw-field-action">
+								<select id="banco" class="form-control" name="banco" th:field="*{banco}" th:disabled="${venda.salvarProibido}">
+									<option th:each="banco : ${bancos}" th:value="${banco.codigo}" th:text="${banco.descricao}"></option>
+								</select>
+								<div class="bw-field-action__icon">
+									<a href="#" data-toggle="modal" data-target="#modalCadastroRapidoBanco">
+										<i class="glyphicon  glyphicon-plus-sign  bw-glyphicon-large"></i>
+									</a>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -200,6 +207,8 @@
 		</form>
 	</div>
 	
+	<div th:replace="banco/CadastroRapidoBanco :: modal"></div>
+	
 	<th:block th:replace="cliente/PesquisaRapidaClientes :: pesquisaRapidaClientes"></th:block>
 	<th:block th:replace="usuario/PesquisaRapidaUsuarios :: pesquisaRapidaUsuarios"></th:block>
 	<th:block th:replace="venda/ItemVenda :: itemVenda"></th:block>
@@ -210,6 +219,7 @@
 <th:block layout:fragment="javascript-extra">
 	<script th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
 	<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
+	<script th:src="@{/javascripts/banco.cadastro-rapido.js}"></script>
 	<script th:src="@{/javascripts/cliente.pesquisa-rapida.js}"></script>
 	<script th:src="@{/javascripts/usuario.pesquisa-rapida.js}"></script>
 	<script th:src="@{/javascripts/venda.autocomplete-itens.js}"></script>

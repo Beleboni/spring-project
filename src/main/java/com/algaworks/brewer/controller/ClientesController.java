@@ -102,7 +102,8 @@ public class ClientesController {
 	public @ResponseBody List<Cliente> pesquisar(String nome) {
 		validarTamanhoNome(nome);
 		//return clientes.findByAtivoIsTrueAndNomeStartingWithIgnoreCase(nome);
-		return clientes.findByNomeStartingWithIgnoreCase(nome);
+		//return clientes.findByNomeStartingWithIgnoreCase(nome);
+		return clientes.findClientes(nome, 1l);
 	}
 
 	private void validarTamanhoNome(String nome) {

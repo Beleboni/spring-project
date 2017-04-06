@@ -1,5 +1,7 @@
 package com.algaworks.brewer.repository.helper.banco;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -51,6 +53,14 @@ public class BancosImpl implements BancosQueries{
 				criteria.add(Restrictions.ilike("descricao", filtro.getDescricao(), MatchMode.ANYWHERE));
 			}
 		}		
+	}
+
+	@Override
+	public List<Banco> bancosAtivo(Long codigo) {
+		
+		return manager.createQuery("select b from Banco b where b.ativo is true and b.codEmpresa = ?1", Banco.class)
+				.setParameter(1, codigo)
+				.getResultList();
 	}
 
 }
