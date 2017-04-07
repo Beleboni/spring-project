@@ -23,7 +23,7 @@ public interface VendasQueries {
 	public BigDecimal valorTicketMedioNoAno();
 	public Long countOrcamento();
 	
-	public List<VendaMes> totalPorMes();
+	public List<VendaMes> totalPorMes(Long codigo);
 	public List<VendaOrigem> totalPorOrigem();
 	
 	public Long countByBanco(Long idBanco);

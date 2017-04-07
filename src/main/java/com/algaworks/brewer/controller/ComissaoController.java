@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.model.Comissao;
+import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Comissoes;
 import com.algaworks.brewer.service.CadastroVendaService;
@@ -30,13 +31,13 @@ public class ComissaoController {
 	@GetMapping("/{codigo}")
 	public ModelAndView visualizar(@PathVariable Long codigo) {
 		ModelAndView mv = new ModelAndView("comissao/ComissaoVenda");
-		
+
 		Venda venda = cadastroVendaService.buscar(codigo);
-		
+
 		Comissao comissao = new Comissao();
 		comissao.setVenda(venda);
 		comissao.setTotalVenda(venda.getValorTotal());
-		
+
 		List<Comissao> cms = comissoes.findByVenda(venda);
 
 		Double totalVenda = venda.getValorTotal().doubleValue();
@@ -50,12 +51,14 @@ public class ComissaoController {
 		mv.addObject(venda);
 		return mv;
 	}
-	
+
 	@Transactional
 	@GetMapping("/excluir/{codigo}")
-	public ModelAndView excluir(@PathVariable Long codigo, Long codVenda, RedirectAttributes attributes) {
+	public ModelAndView excluir(@PathVariable Long codigo, Long codVenda,
+			RedirectAttributes attributes) {
 		comissoes.delete(codigo);
-		attributes.addFlashAttribute("mensagem", "Comissao excluida com sucesso!");
+		attributes.addFlashAttribute("mensagem",
+				"Comissao excluida com sucesso!");
 		return new ModelAndView("redirect:/comissoes/" + codVenda);
 	}
 
@@ -64,8 +67,22 @@ public class ComissaoController {
 	public ModelAndView salvar(Comissao comissao, RedirectAttributes attributes) {
 		comissao.setDataCriacao(LocalDateTime.now());
 		comissoes.save(comissao);
+
+		Venda venda = cadastroVendaService.getVendas().buscarComItens(
+				comissao.getVenda().getCodigo());
+
+		Double totalComissoes = comissoes.findByVenda(venda).stream()
+				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum();
+
+		if (StatusVenda.ENTREGE_PARCIALMENTE.equals(venda.getStatus())
+				&& totalComissoes == venda.getValorTotal().doubleValue()) {
+			venda.setStatus(StatusVenda.CONCLUIDO);
+			cadastroVendaService.getVendas().save(venda);
+		}
+
 		attributes.addFlashAttribute("mensagem", "Comissao salva com sucesso");
-		return new ModelAndView("redirect:/comissoes/" + comissao.getVenda().getCodigo());
+		return new ModelAndView("redirect:/comissoes/"
+				+ comissao.getVenda().getCodigo());
 	}
 
 }

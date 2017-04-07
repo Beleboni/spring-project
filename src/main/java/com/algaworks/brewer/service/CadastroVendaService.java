@@ -97,4 +97,8 @@ public class CadastroVendaService {
 		return venda;
 	}
 
+	public Vendas getVendas() {
+		return this.vendas;
+	}
+	
 }

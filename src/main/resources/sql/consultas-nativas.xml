@@ -9,8 +9,7 @@
 			select date_format(data_criacao, '%Y/%m') mes
 				 , count(*) total
   			from venda
-  			where data_criacao > DATE_SUB(NOW(), INTERVAL 6 MONTH)
-  			  and status = 'EMITIDA'
+  			where data_criacao > DATE_SUB(NOW(), INTERVAL 6 MONTH) and codigo_empresa = ?1
 			group by date_format(data_criacao, '%Y/%m')   
 			order by date_format(data_criacao, '%Y/%m') desc
 	    </query>
@@ -39,7 +38,6 @@
 				   )) total_internacional
 			 from venda v
 			 where v.data_criacao > DATE_SUB(NOW(), INTERVAL 6 MONTH)
-			   and status = 'EMITIDA'
 			   group by date_format(v.data_criacao, '%Y/%m')  
 			   order by date_format(v.data_criacao, '%Y/%m') desc
 	    </query>

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.model.Banco;
 import com.algaworks.brewer.repository.Bancos;
 import com.algaworks.brewer.repository.filter.BancoFilter;
+import com.algaworks.brewer.security.UsuarioSistema;
 import com.algaworks.brewer.service.CadastroBancoService;
 import com.algaworks.brewer.service.exception.DescricaoBancoJaCadastradoException;
 
@@ -79,11 +81,14 @@ public class BancosController {
 
 	@RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody ResponseEntity<?> salvar(
-			@RequestBody @Valid Banco banco, BindingResult result) {
+			@RequestBody @Valid Banco banco, BindingResult result,
+			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+
 		if (result.hasErrors()) {
 			return ResponseEntity.badRequest().body(
 					result.getFieldError("descricao").getDefaultMessage());
 		}
+
 		try {
 			banco.setCodEmpresa(1l);
 			banco = cadastroBancoService.salvar(banco);

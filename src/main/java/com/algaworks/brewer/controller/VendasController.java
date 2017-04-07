@@ -220,7 +220,7 @@ public class VendasController {
 
 	@GetMapping("/totalPorMes")
 	public @ResponseBody List<VendaMes> listarTotalVendaPorMes() {
-		return vendas.totalPorMes();
+		return vendas.totalPorMes(1l);
 	}
 
 	@GetMapping("/porOrigem")

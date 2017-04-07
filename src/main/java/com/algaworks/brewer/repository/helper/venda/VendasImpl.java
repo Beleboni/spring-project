@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -111,8 +112,11 @@ public class VendasImpl implements VendasQueries {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<VendaMes> totalPorMes() {
-		List<VendaMes> vendasMes = manager.createNamedQuery("Vendas.totalPorMes").getResultList();
+	public List<VendaMes> totalPorMes(Long codigo) {
+		Query query = manager.createNamedQuery("Vendas.totalPorMes");
+		query.setParameter(1, codigo);
+		
+		List<VendaMes> vendasMes = query.getResultList();
 		
 		LocalDate hoje = LocalDate.now();
 		for (int i = 1; i <= 6; i++) {
