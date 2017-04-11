@@ -1,6 +1,5 @@
 package com.algaworks.brewer.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.model.Comissao;
-import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Comissoes;
+import com.algaworks.brewer.service.CadastroComissaoService;
 import com.algaworks.brewer.service.CadastroVendaService;
+import com.ibm.icu.math.BigDecimal;
 
 @Controller
 @RequestMapping("/comissoes")
@@ -25,6 +25,10 @@ public class ComissaoController {
 
 	@Autowired
 	private CadastroVendaService cadastroVendaService;
+	
+	@Autowired
+	private CadastroComissaoService CadastroComissaoService;
+	
 	@Autowired
 	private Comissoes comissoes;
 
@@ -47,6 +51,7 @@ public class ComissaoController {
 
 		mv.addObject("exibeCampos", !totalVenda.equals(totalComissoes));
 		mv.addObject("comissoes", cms);
+		mv.addObject("total", BigDecimal.valueOf(totalComissoes));
 		mv.addObject(comissao);
 		mv.addObject(venda);
 		return mv;
@@ -62,23 +67,10 @@ public class ComissaoController {
 		return new ModelAndView("redirect:/comissoes/" + codVenda);
 	}
 
-	@Transactional
 	@PostMapping("/salvar")
 	public ModelAndView salvar(Comissao comissao, RedirectAttributes attributes) {
-		comissao.setDataCriacao(LocalDateTime.now());
-		comissoes.save(comissao);
-
-		Venda venda = cadastroVendaService.getVendas().buscarComItens(
-				comissao.getVenda().getCodigo());
-
-		Double totalComissoes = comissoes.findByVenda(venda).stream()
-				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum();
-
-		if (StatusVenda.ENTREGE_PARCIALMENTE.equals(venda.getStatus())
-				&& totalComissoes == venda.getValorTotal().doubleValue()) {
-			venda.setStatus(StatusVenda.CONCLUIDO);
-			cadastroVendaService.getVendas().save(venda);
-		}
+		
+		CadastroComissaoService.salvar(comissao);		
 
 		attributes.addFlashAttribute("mensagem", "Comissao salva com sucesso");
 		return new ModelAndView("redirect:/comissoes/"

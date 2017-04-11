@@ -245,7 +245,7 @@ public class Venda {
 
 	public boolean isPodeAlterarStatus() {
 		return Arrays.asList(StatusVenda.EMITIDA,
-				StatusVenda.ENTREGE_PARCIALMENTE).contains(this.status);
+				StatusVenda.ENTREGUE_PARCIALMENTE).contains(this.status);
 	}
 
 	public boolean isNaoCadastraComissao() {

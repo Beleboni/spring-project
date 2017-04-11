@@ -10,8 +10,8 @@ public class VendaFilter {
 	private Long codigo;
 	private StatusVenda status;
 
-	private LocalDate desde;
-	private LocalDate ate;
+	private LocalDate desde = LocalDate.now().minusDays(30);
+	private LocalDate ate = LocalDate.now().plusDays(30);
 	private BigDecimal valorMinimo;
 	private BigDecimal valorMaximo;
 

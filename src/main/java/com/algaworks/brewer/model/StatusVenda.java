@@ -5,7 +5,7 @@ public enum StatusVenda {
 	ORCAMENTO("Orçamento"), 
 	EMITIDA("Emitida"), 
 	CANCELADA("Cancelada"),
-	ENTREGE_PARCIALMENTE("Entregue parcialmente"),
+	ENTREGUE_PARCIALMENTE("Entregue parcialmente"),
 	CONCLUIDO("Concluído");
 	
 	private String descricao;
