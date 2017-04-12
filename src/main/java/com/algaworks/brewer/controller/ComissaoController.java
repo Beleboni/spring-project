@@ -17,6 +17,7 @@ import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Comissoes;
 import com.algaworks.brewer.service.CadastroComissaoService;
 import com.algaworks.brewer.service.CadastroVendaService;
+import com.algaworks.brewer.service.exception.ComissaoMaiorQueVendaException;
 import com.ibm.icu.math.BigDecimal;
 
 @Controller
@@ -27,7 +28,7 @@ public class ComissaoController {
 	private CadastroVendaService cadastroVendaService;
 	
 	@Autowired
-	private CadastroComissaoService CadastroComissaoService;
+	private CadastroComissaoService cadastroComissaoService;
 	
 	@Autowired
 	private Comissoes comissoes;
@@ -69,12 +70,14 @@ public class ComissaoController {
 
 	@PostMapping("/salvar")
 	public ModelAndView salvar(Comissao comissao, RedirectAttributes attributes) {
-		
-		CadastroComissaoService.salvar(comissao);		
-
-		attributes.addFlashAttribute("mensagem", "Comissao salva com sucesso");
-		return new ModelAndView("redirect:/comissoes/"
-				+ comissao.getVenda().getCodigo());
+		try {
+			cadastroComissaoService.salvar(comissao);
+			attributes.addFlashAttribute("mensagem", "Comissao salva com sucesso");
+			return new ModelAndView("redirect:/comissoes/" + comissao.getVenda().getCodigo());
+		} catch (ComissaoMaiorQueVendaException e) {
+			attributes.addFlashAttribute("mensagemErro", e.getMessage());
+			return new ModelAndView("redirect:/comissoes/" + comissao.getVenda().getCodigo());
+		}
 	}
 
 }

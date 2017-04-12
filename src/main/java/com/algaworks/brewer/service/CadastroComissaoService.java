@@ -11,6 +11,7 @@ import com.algaworks.brewer.model.Comissao;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Comissoes;
+import com.algaworks.brewer.service.exception.ComissaoMaiorQueVendaException;
 
 @Service
 public class CadastroComissaoService {
@@ -21,22 +22,26 @@ public class CadastroComissaoService {
 	@Autowired 
 	private CadastroVendaService cadastroVendaService;
 	
-	@Transactional
-	public void salvar(Comissao comissao){
-		comissao.setDataCriacao(LocalDateTime.now());
-		comissoes.save(comissao);
-		
+	@Transactional(rollbackOn = ComissaoMaiorQueVendaException.class)
+	public void salvar(Comissao comissao) throws ComissaoMaiorQueVendaException {
 		Venda venda = cadastroVendaService.getVendas().buscarComItens(
 				comissao.getVenda().getCodigo());
 
 		Double totalComissoes = comissoes.findByVenda(venda).stream()
-				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum();
+				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum() + comissao.getTotalEntregue().doubleValue();
+
+		if (totalComissoes > venda.getValorTotal().doubleValue()) {
+			throw new ComissaoMaiorQueVendaException("O valor é maior que o total do pedido.");
+		}
 
 		if (StatusVenda.ENTREGUE_PARCIALMENTE.equals(venda.getStatus())
 				&& totalComissoes == venda.getValorTotal().doubleValue()) {
 			venda.setStatus(StatusVenda.CONCLUIDO);
 			cadastroVendaService.getVendas().save(venda);
 		}
+		
+		comissao.setDataCriacao(LocalDateTime.now());
+		comissoes.save(comissao);
 	}
 
 }

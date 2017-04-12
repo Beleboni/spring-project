@@ -62,7 +62,7 @@ public class ProdutoController {
 		ModelAndView mv = new ModelAndView("produto/PesquisaProdutos");
 		mv.addObject("produtos", produtos.findAll());
 		
-		PageWrapper<Produto> paginaWrapper = new PageWrapper<Produto>(produtos.filtrar(produtoFilter, pageable), httpServletRequest);
+		PageWrapper<Produto> paginaWrapper = new PageWrapper<>(produtos.filtrar(produtoFilter, pageable), httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
 		return mv;
 	}
