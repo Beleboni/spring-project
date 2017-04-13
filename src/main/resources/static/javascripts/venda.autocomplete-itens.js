@@ -31,6 +31,7 @@ Brewer.Autocomplete = (function() {
 		};
 		
 		this.skuOuNomeInput.easyAutocomplete(options);
+		$('.easy-autocomplete').css('width', '100%');
 	}
 	
 	function onItemSelecionado() {

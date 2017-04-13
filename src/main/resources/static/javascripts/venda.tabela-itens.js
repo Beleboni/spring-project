@@ -72,8 +72,9 @@ Brewer.TabelaItens = (function() {
 		this.modal.find('#codigo').val(item.codigo);
 		this.modal.find('#sku').val(item.sku);
 		this.modal.find('#descricao').val(item.nome);
-		this.modal.find('#valor').val(item.valor);
-		this.modal.modal('show');
+		this.modal.find('#quantidade').val(Brewer.formatarMoeda(1));
+		this.modal.find('#valor').val(Brewer.formatarMoeda(item.valor));
+		this.modal.modal({'backdrop': 'static', 'keyboard': false});
 	}
 	
 	//Atualiza os itens no servidor
@@ -104,7 +105,7 @@ Brewer.TabelaItens = (function() {
 			_modal.find('#obs').val(_tr.find('.observacao').text());
 			_modal.find('#quantidade').val(_tr.find('.quantidade').text().trim());
 			_modal.find('#valor').val(Brewer.recuperarValor(_tr.find('.valor').text()));
-			_modal.modal('show');
+			_modal.modal({'backdrop': 'static', 'keyboard': false});
 		});
 	}
 	

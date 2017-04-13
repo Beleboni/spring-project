@@ -183,7 +183,8 @@
 				
 				<div class="row" th:each="comissao : ${comissoes}">
 					<div class="col-sm-12">
-					[[${comissao.totalEntregue}]] | [[${comissao.percentual}]] | [[${comissao.total}]] | <a th:href="@{/comissoes/excluir/{codigo}(codigo=${comissao.codigo},codVenda=${venda.codigo})}"><i class="fa fa-trash"></i></a>
+					[[${comissao.totalEntregue}]] | [[${comissao.percentual}]] | [[${comissao.total}]] | <a th:href="@{/comissoes/excluir/{codigo}(codigo=${comissao.codigo},codVenda=${venda.codigo})}"><i class="fa fa-trash"></i></a> 
+					<a href="#excluir" class="js-tooltip btn-excluir" th:attr="data-codigo=${comissao.codigo}" title="Excluir comissão"><i class="glyphicon glyphicon-trash text-danger"></i></a>
 					</div>				
 				</div>			  
 			</div>					
@@ -193,12 +194,16 @@
 			<span class="js-valor-total-box" th:text="${{total}}">0,00</span>
 		</div>
 	</div>
+	
+	<th:block th:replace="comissao/ExcluirComissao :: excluirComissao"></th:block>
+	
 </section>
 
 <th:block layout:fragment="javascript-extra">
 	<script th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
 	<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
 	<script th:src="@{/javascripts/campos.js}"></script>
+	<script th:src="@{/javascripts/modal.excluir.js}"></script>
 	<script>
 	$(function() {
 		$('.js-abas-venda a').click(function (e) {

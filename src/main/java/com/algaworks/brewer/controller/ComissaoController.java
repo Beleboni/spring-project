@@ -59,13 +59,13 @@ public class ComissaoController {
 	}
 
 	@Transactional
-	@GetMapping("/excluir/{codigo}")
-	public ModelAndView excluir(@PathVariable Long codigo, Long codVenda,
-			RedirectAttributes attributes) {
+	@PostMapping("/excluir/{codVenda}/comissao")
+	public ModelAndView excluir(@PathVariable Long codVenda, Long codigo, RedirectAttributes attributes) {
+		
 		comissoes.delete(codigo);
-		attributes.addFlashAttribute("mensagem",
-				"Comissao excluida com sucesso!");
-		return new ModelAndView("redirect:/comissoes/" + codVenda);
+		
+		attributes.addFlashAttribute("mensagem", "Comissao excluida com sucesso!");
+		return new ModelAndView(String.format("redirect:/comissoes/%d", codVenda));
 	}
 
 	@PostMapping("/salvar")

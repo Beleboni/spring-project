@@ -1,5 +1,6 @@
 package com.algaworks.brewer.controller;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ import com.algaworks.brewer.repository.filter.VendaFilter;
 import com.algaworks.brewer.security.UsuarioSistema;
 import com.algaworks.brewer.service.CadastroVendaService;
 import com.algaworks.brewer.session.TabelasItensSession;
+import com.ibm.icu.math.BigDecimal;
 
 @Controller
 @RequestMapping("/vendas")
@@ -151,18 +153,21 @@ public class VendasController {
 
 	@PostMapping("/item/{codigoCerveja}/adicionar")
 	public ModelAndView adicionarItem(
-			@PathVariable("codigoCerveja") Cerveja cerveja, Integer quantidade,
-			Float valor, String observacao, String uuid) {
-		tabelaItens.adicionarItem(uuid, cerveja, quantidade, valor, observacao);
+			@PathVariable("codigoCerveja") Cerveja cerveja,
+			BigInteger quantidade, BigDecimal valor, String observacao,
+			String uuid) {
+		tabelaItens.adicionarItem(uuid, cerveja, quantidade.intValueExact(),
+				valor.floatValue(), observacao);
 		return mvTabelaItensVenda(uuid);
 	}
 
 	@PutMapping("/item/{codigoCerveja}/alterar")
 	public ModelAndView alterarItem(
-			@PathVariable("codigoCerveja") Cerveja cerveja, Integer quantidade,
-			Float valor, String observacao, String uuid, String uuidItem) {
-		tabelaItens.alterarItem(uuid, cerveja, uuidItem, quantidade, valor,
-				observacao);
+			@PathVariable("codigoCerveja") Cerveja cerveja,
+			BigInteger quantidade, BigDecimal valor, String observacao,
+			String uuid, String uuidItem) {
+		tabelaItens.alterarItem(uuid, cerveja, uuidItem,
+				quantidade.intValueExact(), valor.floatValue(), observacao);
 		return mvTabelaItensVenda(uuid);
 	}
 
@@ -183,7 +188,8 @@ public class VendasController {
 		mv.addObject("tiposPessoa", TipoPessoa.values());
 
 		PageWrapper<Venda> paginaWrapper = new PageWrapper<>(vendas.filtrar(
-				vendaFilter, usuarioSistema.getUsuario(), pageable), httpServletRequest);
+				vendaFilter, usuarioSistema.getUsuario(), pageable),
+				httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
 		return mv;
 	}
@@ -249,4 +255,3 @@ public class VendasController {
 	}
 
 }
-
