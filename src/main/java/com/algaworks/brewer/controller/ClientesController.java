@@ -77,7 +77,7 @@ public class ClientesController {
 	@PostMapping("/alterar")
 	public ModelAndView alterar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
-			return visualizar(cliente.getCodigo());
+			return alterar(cliente);
 		}
 		
 		cadastroClienteService.alterar(cliente);
@@ -120,6 +120,15 @@ public class ClientesController {
 	@GetMapping("/{codigo}")
 	public ModelAndView visualizar(@PathVariable Long codigo){
 		Cliente cliente = clientes.findOne(codigo);
+		ModelAndView mv = new ModelAndView("cliente/AlterarCliente");
+		this.addObjects(mv, cliente);
+		return mv;
+	}
+	
+	//Adicionar esse aqui
+	//(p.status = null or null is null)
+	@RequestMapping("/alterar")
+	public ModelAndView alterar(Cliente cliente) {
 		ModelAndView mv = new ModelAndView("cliente/AlterarCliente");
 		this.addObjects(mv, cliente);
 		return mv;
