@@ -75,6 +75,7 @@ Brewer.TabelaItens = (function() {
 		this.modal.find('#quantidade').val(Brewer.formatarMoeda(1));
 		this.modal.find('#valor').val(Brewer.formatarMoeda(item.valor));
 		this.modal.modal({'backdrop': 'static', 'keyboard': false});
+		sumAB('#quantidade', '#valor');
 	}
 	
 	//Atualiza os itens no servidor
@@ -106,6 +107,7 @@ Brewer.TabelaItens = (function() {
 			_modal.find('#quantidade').val(_tr.find('.quantidade').text().trim());
 			_modal.find('#valor').val(Brewer.recuperarValor(_tr.find('.valor').text()));
 			_modal.modal({'backdrop': 'static', 'keyboard': false});
+			sumAB('#quantidade', '#valor');
 		});
 	}
 	
@@ -129,3 +131,18 @@ Brewer.TabelaItens = (function() {
 	return TabelaItens;
 	
 }());
+
+
+function sumAB(idA, idB) {
+	var a = Brewer.recuperarValor($(idA).val());
+	var b = Brewer.recuperarValor($(idB).val());
+	$('#rs_total').val(Brewer.formatarMoeda(a * b));
+}
+
+$('#valor').on('keypress change', function() {
+	sumAB(this, '#quantidade');
+});
+
+$('#quantidade').on('keypress change', function() {
+	sumAB(this, '#valor');
+});
