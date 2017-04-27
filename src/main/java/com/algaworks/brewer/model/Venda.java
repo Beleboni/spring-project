@@ -37,7 +37,10 @@ public class Venda {
 	private Long codigo;
 
 	@Column(name = "data_criacao")
-	private LocalDateTime dataCriacao;
+	private LocalDateTime dataCriacao = LocalDateTime.now();
+	
+	@Column(name = "data_finalizacao")
+	private LocalDateTime dataFinalizacao;
 
 	@Column(name = "valor_frete")
 	private BigDecimal valorFrete;

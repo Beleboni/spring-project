@@ -19,8 +19,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-10">
-					<h1 th:if="${venda.nova}" th:text="#{venda.cadastro.titulo}">Cadastro de venda</h1>
-					<h1 th:unless="${venda.nova}" th:text="#{venda.edicao.titulo(${venda.codigo})}">Edição da venda nº </h1>
+					<h1>Cadastro de venda</h1>
 				</div>
 			</div>
 		</div>
@@ -198,12 +197,15 @@
 				<div class="col-lg-12">
 					<div class="btn-group">
 					  <button type="submit" class="btn  btn-primary  js-submit-btn" data:acao="salvar">Salvar</button>
-					</div>
-				
-					<button class="btn  btn-danger  js-submit-btn" data:acao="cancelar" th:unless="${venda.nova}">Cancelar</button>
+					</div>					
 				</div>
 			</div>
 		</div>
+		</form>
+		
+		<form method="POST" th:action="@{/vendas/excluir/{codigo}(codigo=${venda.codigo})}" th:object="${venda}">
+			<input type="hidden" name="_method" value="DELETE">
+			<button type="submit" class="btn btn-danger" th:unless="${venda.nova}">Cancelar</button>
 		</form>
 	</div>
 	

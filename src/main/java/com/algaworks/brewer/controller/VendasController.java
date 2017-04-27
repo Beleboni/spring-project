@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -38,6 +38,7 @@ import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Bancos;
 import com.algaworks.brewer.repository.Cervejas;
+import com.algaworks.brewer.repository.ItensVenda;
 import com.algaworks.brewer.repository.Vendas;
 import com.algaworks.brewer.repository.filter.VendaFilter;
 import com.algaworks.brewer.security.UsuarioSistema;
@@ -66,6 +67,9 @@ public class VendasController {
 
 	@Autowired
 	private Bancos bancos;
+	
+	@Autowired
+	private ItensVenda itensVenda;
 
 	@Autowired
 	private Mailer mailer;
@@ -74,20 +78,25 @@ public class VendasController {
 	public void inicializarValidador(WebDataBinder binder) {
 		binder.setValidator(vendaValidator);
 	}
-
+	
+	@Transactional
 	@GetMapping("/nova")
-	public ModelAndView nova(Venda venda) {
+	public ModelAndView nova() {
+		Venda venda = vendas.save(new Venda());
+		return new ModelAndView("redirect:/vendas/" + venda.getCodigo() +"/nova");
+	}
+	
+	@GetMapping("/{codigo}/nova")
+	public ModelAndView iniciar(@PathVariable("codigo") Venda venda) {
 		ModelAndView mv = new ModelAndView("venda/CadastroVenda");
-
 		setUuid(venda);
 		mv.addObject("bancos", bancos.bancosAtivo(1l));
 		mv.addObject("itens", tabelaItens.getItens(venda.getUuid()));
 		mv.addObject("valorFrete", venda.getValorFrete());
 		mv.addObject("valorDesconto", venda.getValorDesconto());
-		mv.addObject("valorTotalItens",
-				tabelaItens.getValorTotal(venda.getUuid()));
+		mv.addObject("valorTotalItens", tabelaItens.getValorTotal(venda.getUuid()));
 		mv.addObject("statusVenda", StatusVenda.values());
-
+		mv.addObject(venda);
 		return mv;
 	}
 
@@ -96,7 +105,8 @@ public class VendasController {
 			RedirectAttributes attributes) {
 		validarVenda(venda, result);
 		if (result.hasErrors()) {
-			return nova(venda);
+			// return nova(venda);
+			return null;
 		}
 		cadastroVendaService.salvar(venda, tabelaItens);
 		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
@@ -160,6 +170,13 @@ public class VendasController {
 				valor.floatValue(), observacao);
 		return mvTabelaItensVenda(uuid);
 	}
+	
+	@Transactional
+	@PostMapping("/item/add")
+	public ModelAndView addItem(ItemVenda item) {
+		itensVenda.save(item);
+		return null;
+	}
 
 	@PutMapping("/item/{codigoCerveja}/alterar")
 	public ModelAndView alterarItem(
@@ -194,34 +211,28 @@ public class VendasController {
 		return mv;
 	}
 
-	@GetMapping("/{codigo}")
-	public ModelAndView editar(@PathVariable Long codigo) {
-		Venda venda = cadastroVendaService.buscar(codigo);
+//	@GetMapping("/{codigo}")
+//	public ModelAndView editar(@PathVariable Long codigo) {
+//		Venda venda = cadastroVendaService.buscar(codigo);
+//
+//		setUuid(venda);
+//		for (ItemVenda item : venda.getItens()) {
+//			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(),
+//					item.getQuantidade(), item.getValorUnitario(),
+//					item.getObservacoes());
+//		}
+//
+////		ModelAndView mv = 
+////		mv.addObject(venda);
+//		return null;
+//	}
 
-		setUuid(venda);
-		for (ItemVenda item : venda.getItens()) {
-			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(),
-					item.getQuantidade(), item.getValorUnitario(),
-					item.getObservacoes());
-		}
-
-		ModelAndView mv = nova(venda);
-		mv.addObject(venda);
-		return mv;
-	}
-
-	@PostMapping(value = "/nova", params = "cancelar")
-	public ModelAndView cancelar(Venda venda, BindingResult result,
-			RedirectAttributes attributes,
-			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
-		try {
-			cadastroVendaService.cancelar(venda);
-		} catch (AccessDeniedException e) {
-			return new ModelAndView("/403");
-		}
-
-		attributes.addFlashAttribute("mensagem", "Venda cancelada com sucesso");
-		return new ModelAndView("redirect:/vendas/" + venda.getCodigo());
+	@Transactional
+	@DeleteMapping("/excluir/{codigo}")
+	public ModelAndView excluir(@PathVariable("codigo") Venda venda, RedirectAttributes attributes) {
+		vendas.delete(venda);
+		attributes.addFlashAttribute("mensagem", "Venda excluída com sucesso");
+		return new ModelAndView("redirect:/vendas/");
 	}
 
 	@GetMapping("/totalPorMes")

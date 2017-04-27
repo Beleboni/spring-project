@@ -30,8 +30,10 @@
 		</div>
 	</div>
 	
-	<div class="container-fluid">
+	<div class="container-fluid">	
 		<form method="GET" th:object="${vendaFilter}" th:action="@{/vendas}">
+			<brewer:message/>
+			
 			<div class="row">
 				<div class="form-group  col-sm-6">
 					<label class="control-label" for="codigo">Código</label>

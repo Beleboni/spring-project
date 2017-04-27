@@ -20,7 +20,7 @@ public class ItemVenda {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
-	private Integer quantidade;
+	private BigDecimal quantidade;
 
 	private String observacoes;
 
@@ -54,11 +54,11 @@ public class ItemVenda {
 		this.codigo = codigo;
 	}
 
-	public Integer getQuantidade() {
+	public BigDecimal getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Integer quantidade) {
+	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
 
@@ -79,7 +79,7 @@ public class ItemVenda {
 	}
 
 	public BigDecimal getValorTotal() {
-		return valorUnitario.multiply(new BigDecimal(quantidade));
+		return valorUnitario.multiply(quantidade);
 	}
 
 	public Venda getVenda() {

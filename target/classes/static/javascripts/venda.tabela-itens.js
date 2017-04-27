@@ -67,13 +67,14 @@ Brewer.TabelaItens = (function() {
 	
 	// Abre modal com os dados do item.
 	function onItemSelecionado(evento, item) {
-		this.modal.find('form').attr('action', 'item/' + item.codigo + '/adicionar');
+		//this.modal.find('form').attr('action', 'item/' + item.codigo + '/adicionar');
+		this.modal.find('form').attr('action', '/vendas/item/add');
 		this.modal.find('form').attr('method', 'post');
-		this.modal.find('#codigo').val(item.codigo);
+		this.modal.find('#cod-cerveja').val(item.codigo);
 		this.modal.find('#sku').val(item.sku);
 		this.modal.find('#descricao').val(item.nome);
-		this.modal.find('#quantidade').val(Brewer.formatarMoeda(1));
-		this.modal.find('#valor').val(Brewer.formatarMoeda(item.valor));
+		this.modal.find('#quantidade').val(1);
+		this.modal.find('#valor').val(item.valor);
 		this.modal.modal({'backdrop': 'static', 'keyboard': false});
 		sumAB('#quantidade', '#valor');
 	}
@@ -136,7 +137,7 @@ Brewer.TabelaItens = (function() {
 function sumAB(idA, idB) {
 	var a = Brewer.recuperarValor($(idA).val());
 	var b = Brewer.recuperarValor($(idB).val());
-	$('#rs_total').val(Brewer.formatarMoeda(a * b));
+	$('#rs_total').val(a * b);
 }
 
 $('#valor').on('keypress change', function() {

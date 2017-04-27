@@ -35,7 +35,7 @@ class TabelaItensVenda {
 	private void setItemVenda(ItemVenda itemVenda, Cerveja cerveja,
 			Integer quantidade, Float valor, String observacao) {
 		itemVenda.setCerveja(cerveja);
-		itemVenda.setQuantidade(quantidade);
+		//itemVenda.setQuantidade(quantidade);
 		itemVenda.setValorUnitario(BigDecimal.valueOf(valor));
 		itemVenda.setObservacoes(observacao);
 	}
