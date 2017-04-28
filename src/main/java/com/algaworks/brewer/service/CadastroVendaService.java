@@ -1,7 +1,6 @@
 package com.algaworks.brewer.service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,21 +49,12 @@ public class CadastroVendaService {
 			//Rever aqui
 			Venda vendaExistente = vendas.findOne(venda.getCodigo());
 			venda.setDataCriacao(vendaExistente.getDataCriacao());
-			vendaExistente.setUuid(venda.getUuid());
 			
 			if (vendaExistente.isPodeAlterarStatus()) {
 				StatusVenda statusNovo = venda.getStatus();
 				venda = vendaExistente;
 				venda.setStatus(statusNovo);
 			}
-		}
-
-		// Não existe (não se preocupar)
-		if (venda.getDataEntrega() != null) {
-			venda.setDataHoraEntrega(LocalDateTime.of(
-					venda.getDataEntrega(),
-					venda.getHorarioEntrega() != null ? venda
-							.getHorarioEntrega() : LocalTime.NOON));
 		}
 		
 		//Mudar para baixo
@@ -77,7 +67,6 @@ public class CadastroVendaService {
 		if (!venda.isNova()) {
 			itensVenda.delete(itensVenda.findByVenda(venda));
 		}
-		venda.adicionarItens(itens.getItens(venda.getUuid()));
 	}
 	
 

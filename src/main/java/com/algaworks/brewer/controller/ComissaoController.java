@@ -41,11 +41,11 @@ public class ComissaoController {
 
 		Comissao comissao = new Comissao();
 		comissao.setVenda(venda);
-		comissao.setTotalVenda(venda.getValorTotal());
+		comissao.setTotalVenda(venda.getValorTotalItens());
 
 		List<Comissao> cms = comissoes.findByVenda(venda);
 
-		Double totalVenda = venda.getValorTotal().doubleValue();
+		Double totalVenda = venda.getValorTotalItens().doubleValue();
 
 		Double totalComissoes = cms.stream()
 				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum();

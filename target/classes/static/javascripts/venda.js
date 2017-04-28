@@ -49,13 +49,13 @@ Brewer.Venda = (function() {
 
 $(function() {
 	
-	var autocomplete = new Brewer.Autocomplete();
-	autocomplete.iniciar();
+//	var autocomplete = new Brewer.Autocomplete();
+//	autocomplete.iniciar();
 	
-	var tabelaItens = new Brewer.TabelaItens(autocomplete);
-	tabelaItens.iniciar();
+//	var tabelaItens = new Brewer.TabelaItens(autocomplete);
+//	tabelaItens.iniciar();
 	
-	var venda = new Brewer.Venda(tabelaItens);
-	venda.iniciar();
+//	var venda = new Brewer.Venda(tabelaItens);
+//	venda.iniciar();
 	
 });

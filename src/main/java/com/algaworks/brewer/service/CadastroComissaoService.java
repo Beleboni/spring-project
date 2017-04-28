@@ -30,12 +30,12 @@ public class CadastroComissaoService {
 		Double totalComissoes = comissoes.findByVenda(venda).stream()
 				.mapToDouble(c -> c.getTotalEntregue().doubleValue()).sum() + comissao.getTotalEntregue().doubleValue();
 
-		if (totalComissoes > venda.getValorTotal().doubleValue()) {
+		if (totalComissoes > venda.getValorTotalItens().doubleValue()) {
 			throw new ComissaoMaiorQueVendaException("O valor é maior que o total do pedido.");
 		}
 
 		if (StatusVenda.ENTREGUE_PARCIALMENTE.equals(venda.getStatus())
-				&& totalComissoes == venda.getValorTotal().doubleValue()) {
+				&& totalComissoes == venda.getValorTotalItens().doubleValue()) {
 			venda.setStatus(StatusVenda.CONCLUIDO);
 			cadastroVendaService.getVendas().save(venda);
 		}

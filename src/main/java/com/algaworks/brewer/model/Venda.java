@@ -3,12 +3,10 @@ package com.algaworks.brewer.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,14 +20,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "venda")
 @DynamicUpdate
+@Table(name = "venda")
 public class Venda {
 
 	@Id
@@ -38,18 +34,9 @@ public class Venda {
 
 	@Column(name = "data_criacao")
 	private LocalDateTime dataCriacao = LocalDateTime.now();
-	
+
 	@Column(name = "data_finalizacao")
 	private LocalDateTime dataFinalizacao;
-
-	@Column(name = "valor_frete")
-	private BigDecimal valorFrete;
-
-	@Column(name = "valor_desconto")
-	private BigDecimal valorDesconto;
-
-	@Column(name = "valor_total")
-	private BigDecimal valorTotal = BigDecimal.ZERO;
 
 	private String observacao;
 
@@ -63,7 +50,7 @@ public class Venda {
 	@ManyToOne
 	@JoinColumn(name = "codigo_banco")
 	private Banco banco;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
@@ -71,19 +58,11 @@ public class Venda {
 	@Enumerated(EnumType.STRING)
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.REMOVE)
 	private List<ItemVenda> itens = new ArrayList<>();
 
-	@Transient
-	private String uuid;
-
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Transient
-	private LocalDate dataEntrega;
-
-	@DateTimeFormat(pattern = "HH:mm")
-	@Transient
-	private LocalTime horarioEntrega;
+	@Column(name = "valor_total")
+	private BigDecimal valorTotal;
 
 	public Venda(Long codigo) {
 		this.codigo = codigo;
@@ -106,30 +85,6 @@ public class Venda {
 
 	public void setDataCriacao(LocalDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
-	}
-
-	public BigDecimal getValorFrete() {
-		return valorFrete;
-	}
-
-	public void setValorFrete(BigDecimal valorFrete) {
-		this.valorFrete = valorFrete;
-	}
-
-	public BigDecimal getValorDesconto() {
-		return valorDesconto;
-	}
-
-	public void setValorDesconto(BigDecimal valorDesconto) {
-		this.valorDesconto = valorDesconto;
-	}
-
-	public BigDecimal getValorTotal() {
-		return valorTotal;
-	}
-
-	public void setValorTotal(BigDecimal valorTotal) {
-		this.valorTotal = valorTotal;
 	}
 
 	public String getObservacao() {
@@ -156,7 +111,6 @@ public class Venda {
 		this.cliente = cliente;
 	}
 
-		
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -176,34 +130,10 @@ public class Venda {
 	public List<ItemVenda> getItens() {
 		return itens;
 	}
-	
+
 	public void setItens(List<ItemVenda> itens) {
 		this.itens = itens;
 	}
-
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public LocalDate getDataEntrega() {
-		return dataEntrega;
-	}
-
-	public void setDataEntrega(LocalDate dataEntrega) {
-		this.dataEntrega = dataEntrega;
-	}
-
-	public LocalTime getHorarioEntrega() {
-		return horarioEntrega;
-	}
-
-	public void setHorarioEntrega(LocalTime horarioEntrega) {
-		this.horarioEntrega = horarioEntrega;
-	}	
 
 	public Banco getBanco() {
 		return banco;
@@ -217,19 +147,9 @@ public class Venda {
 		return codigo == null;
 	}
 
-	public void adicionarItens(List<ItemVenda> itens) {
-		this.itens = itens;
-		this.itens.forEach(i -> i.setVenda(this));
-	}
-
 	public BigDecimal getValorTotalItens() {
 		return getItens().stream().map(ItemVenda::getValorTotal)
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-	}
-
-	public void calcularValorTotal() {
-		this.valorTotal = calcularValorTotal(getValorTotalItens(),
-				getValorFrete(), getValorDesconto());
 	}
 
 	public Long getDiasCriacao() {
@@ -257,14 +177,20 @@ public class Venda {
 				this.status);
 	}
 
-	private BigDecimal calcularValorTotal(BigDecimal valorTotalItens,
-			BigDecimal valorFrete, BigDecimal valorDesconto) {
-		BigDecimal valorTotal = valorTotalItens.add(
-				Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
-				.subtract(
-						Optional.ofNullable(valorDesconto).orElse(
-								BigDecimal.ZERO));
+	public LocalDateTime getDataFinalizacao() {
+		return dataFinalizacao;
+	}
+
+	public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
+		this.dataFinalizacao = dataFinalizacao;
+	}
+
+	public BigDecimal getValorTotal() {
 		return valorTotal;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
 	}
 
 	@Override
@@ -291,21 +217,5 @@ public class Venda {
 			return false;
 		return true;
 	}
-
-	// public Set<Comissao> getComissoes() {
-	// return comissoes;
-	// }
-	//
-	// public void setComissoes(Set<Comissao> comissoes) {
-	// this.comissoes = comissoes;
-	// }
-	//
-	// public Comissao getComissao() {
-	// return comissao;
-	// }
-	//
-	// public void setComissao(Comissao comissao) {
-	// this.comissao = comissao;
-	// }
 
 }

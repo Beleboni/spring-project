@@ -1,9 +1,11 @@
 package com.algaworks.brewer.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,9 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "item_venda")
-public class ItemVenda {
+public class ItemVenda implements Serializable {
+
+	private static final long serialVersionUID = -6972436216845857021L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +37,29 @@ public class ItemVenda {
 	@JoinColumn(name = "codigo_cerveja")
 	private Cerveja cerveja;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "codigo_venda")
 	private Venda venda;
 
 	@Transient
 	private String uuid;
+
+	public ItemVenda() {}
+
+	public ItemVenda(Long codigo, BigDecimal quantidade, String observacoes,
+			BigDecimal valorUnitario, Cerveja cerveja, Venda venda, String uuid) {
+		this.codigo = codigo;
+		this.quantidade = quantidade;
+		this.observacoes = observacoes;
+		this.valorUnitario = valorUnitario;
+		this.cerveja = cerveja;
+		this.venda = venda;
+		this.uuid = uuid;
+	}
+
+	public ItemVenda(Venda venda) {
+		this.venda = venda;
+	}
 
 	public String getUuid() {
 		return uuid;
@@ -82,6 +105,7 @@ public class ItemVenda {
 		return valorUnitario.multiply(quantidade);
 	}
 
+	@JsonIgnore
 	public Venda getVenda() {
 		return venda;
 	}

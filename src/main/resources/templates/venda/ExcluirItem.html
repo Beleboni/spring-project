@@ -11,39 +11,9 @@
       		</div>
       		
    			<div class="modal-body">
-   				<input type="hidden" id="codigo">
-   				
    				<form class="form" action="" method="post">
-   					<input type="hidden" id="uuid" th:field="${venda.uuid}">
-   					<input type="hidden" id="uuidItem" name="uuidItem">
-   					
-   					<div class="row">
-   						<div class="form-group col-sm-3">
-			            	<label class="control-label" for="sku">Código</label>
-		                	<input id="sku" type="text" class="form-control">
-		            	</div>
-		            	<div class="form-group col-md-9">
-			            	<label class="control-label" for="descricao">Descrição produto</label>
-		                	<input id="descricao" type="text" class="form-control">
-			            </div>   					
-   					</div>
-   					<div class="row">
-   						<div class="form-group col-md-12">
-			            	<label class="control-label" for="obs">Observações</label>
-		                	<input id="obs" type="text" class="form-control" name="observacao">
-			            </div>
-			        </div>
-			        <div class="row">    
-			            <div class="form-group col-md-2">
-			            	<label class="control-label" for="quant">Quant.</label>
-		                	<input id="quantidade" type="text" class="form-control" name="quantidade">
-			            </div>
-          	            <div class="form-group col-md-2">
-          					<label class="control-label" for="valor">Valor</label>
-		                	<input id="valor" type="text" class="form-control" name="valor">
-			            </div>
-   					</div>
-		            
+   					<input type="hidden" id="codigo">
+   					Deseja excluir item?
 		            <button type="submit" class="btn  btn-primary">Salvar</button>
 		            <a href="#" class="btn  btn-default" data-dismiss="modal">Cancelar</a>	
 		        </form>		        
