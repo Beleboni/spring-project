@@ -1,0 +1,49 @@
+.notifications.top-right {
+	right: 15px;
+	top: 60px;
+}
+
+.notifications .alert {
+	padding: 8px 13px;
+}
+
+.notifications .close {
+	padding-left: 10px;
+}
+
+.notifications.dark .alert {
+	color: #fff;
+	background-color: #444;
+	border-radius: 3px;
+	border: none;
+}
+
+.notifications.dark .alert-danger:before,
+.notifications.dark .alert-warning:before,
+.notifications.dark .alert-success:before, 
+.notifications.dark .alert-info:before {
+	font-family: "FontAwesome";
+	content: "\f10c";
+	padding-right: 10px;
+}
+
+.notifications.dark .alert-danger:before {
+	color: #e63f3f;
+}
+
+.notifications.dark .alert-warning:before {
+	color: #ffbd4d;
+}
+
+.notifications.dark .alert-success:before {
+	color: #00b403;
+}
+
+.notifications.dark .alert-info:before {
+	color: #1492d1;
+}
+
+.notifications.dark .close {
+	text-shadow: none;
+	color: #fff;
+}

@@ -1,6 +1,5 @@
 package com.algaworks.brewer.controller;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,7 +29,6 @@ import com.algaworks.brewer.controller.validator.VendaValidator;
 import com.algaworks.brewer.dto.VendaMes;
 import com.algaworks.brewer.dto.VendaOrigem;
 import com.algaworks.brewer.mail.Mailer;
-import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -42,7 +41,7 @@ import com.algaworks.brewer.repository.filter.VendaFilter;
 import com.algaworks.brewer.security.UsuarioSistema;
 import com.algaworks.brewer.service.CadastroVendaService;
 import com.algaworks.brewer.session.TabelasItensSession;
-import com.ibm.icu.math.BigDecimal;
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/vendas")
@@ -81,8 +80,7 @@ public class VendasController {
 	@GetMapping("/nova")
 	public ModelAndView nova() {
 		Venda venda = vendas.save(new Venda());
-		return new ModelAndView("redirect:/vendas/" + venda.getCodigo()
-				+ "/nova");
+		return new ModelAndView("redirect:/vendas/" + venda.getCodigo() + "/nova");
 	}
 
 	@GetMapping("/{codigo}/nova")
@@ -98,33 +96,24 @@ public class VendasController {
 		return mv;
 	}
 
-	@Transactional
-	@PostMapping("/item/salvar")
-	public ModelAndView salvarItem(ItemVenda item) {
-		itensVenda.save(item);
-		return null;
-	}
-
-	@RequestMapping(value = "/item", consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/item", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
 	public @ResponseBody ItemVenda getItem(Long codigo) {
 		return itensVenda.findOne(codigo);
 	}
-
-	@PutMapping("/item/{codigoCerveja}/alterar")
-	public ModelAndView alterarItem(
-			@PathVariable("codigoCerveja") Cerveja cerveja,
-			BigInteger quantidade, BigDecimal valor, String observacao,
-			String uuid, String uuidItem) {
-		tabelaItens.alterarItem(uuid, cerveja, uuidItem,
-				quantidade.intValueExact(), valor.floatValue(), observacao);
-		return mvTabelaItensVenda(uuid);
+	
+	@Transactional
+	@PostMapping(value = "/item/salvar")
+	public ModelAndView saveItem(ItemVenda item) {
+		ModelAndView mv = new ModelAndView("venda/ItemVendaTabela");
+		mv.addObject("itens", Lists.newArrayList(itensVenda.save(item)));
+		return mv;
 	}
 
-	@DeleteMapping("/item/{uuid}/excluir/{uuidItem}")
-	public ModelAndView excluirItem(@PathVariable String uuid,
-			@PathVariable String uuidItem) {
-		tabelaItens.excluirItem(uuid, uuidItem);
-		return mvTabelaItensVenda(uuid);
+	@Transactional
+	@DeleteMapping(value = "/item/excluir")
+	public @ResponseBody ResponseEntity<String> deleteItem(ItemVenda item) {
+		itensVenda.delete(item);
+		return ResponseEntity.ok("Item excluído com sucesso");
 	}
 
 	@GetMapping
@@ -143,26 +132,9 @@ public class VendasController {
 		return mv;
 	}
 
-	// @GetMapping("/{codigo}")
-	// public ModelAndView editar(@PathVariable Long codigo) {
-	// Venda venda = cadastroVendaService.buscar(codigo);
-	//
-	// setUuid(venda);
-	// for (ItemVenda item : venda.getItens()) {
-	// tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(),
-	// item.getQuantidade(), item.getValorUnitario(),
-	// item.getObservacoes());
-	// }
-	//
-	// // ModelAndView mv =
-	// // mv.addObject(venda);
-	// return null;
-	// }
-
 	@Transactional
 	@DeleteMapping("/excluir/{codigo}")
-	public ModelAndView excluir(@PathVariable("codigo") Venda venda,
-			RedirectAttributes attributes) {
+	public ModelAndView excluir(@PathVariable("codigo") Venda venda, RedirectAttributes attributes) {
 		vendas.delete(venda);
 		attributes.addFlashAttribute("mensagem", "Venda excluída com sucesso");
 		return new ModelAndView("redirect:/vendas/");
@@ -176,13 +148,6 @@ public class VendasController {
 	@GetMapping("/porOrigem")
 	public @ResponseBody List<VendaOrigem> vendasPorNacionalidade() {
 		return this.vendas.totalPorOrigem();
-	}
-
-	private ModelAndView mvTabelaItensVenda(String uuid) {
-		ModelAndView mv = new ModelAndView("venda/TabelaItensVenda");
-		mv.addObject("itens", tabelaItens.getItens(uuid));
-		mv.addObject("valorTotal", tabelaItens.getValorTotal(uuid));
-		return mv;
 	}
 
 }

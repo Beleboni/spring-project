@@ -123,7 +123,33 @@
 					</div>
 					
 					<div class="bw-tabela-cervejas  js-tabela-cervejas-container" data:valor="${valorTotalItens}">
-						<th:block th:replace="venda/TabelaItensVenda"/>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table table-responsive">
+									<table id="tabela-itens" class="table">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Produto/Observação</th>
+												<th>Unidade</th>
+												<th>Quantidade</th>
+												<th>Total</th>
+												<th>Ações</th>
+											</tr>
+										</thead>
+										<tbody>
+											<th:block th:replace="venda/ItemVendaTabela" />
+											<tr class="empty-tr" th:classappend="${itens.empty} ? '' : hidden">
+												<td colspan="6" align="left">
+													<i class="glyphicon  glyphicon-shopping-cart"></i> 
+													<span>Você ainda não adicionou nenhuma cerveja.</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				

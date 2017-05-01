@@ -1,0 +1,22 @@
+<tr class="js-tabela-item" th:each="item : ${itens}" data:codigo="${item.codigo}">
+	<td>
+		<span class="label  label-default sku">[[${{item.cerveja.sku}}]]</span>
+	</td>
+	<td>
+		<span class="descricao">[[${{item.cerveja.nome}}]]</span>
+		<div class="text-muted small observacao">[[${{item.observacoes}}]]</div>
+	</td>	
+	<td class="quantidade">
+		[[${{item.quantidade}}]]							
+	</td>
+	<td class="valor">
+		[[${{item.valorUnitario}}]]				
+	</td>
+	<td class="total-item">
+		R$ [[${{item.valorTotal}}]]
+	</td>
+	<td>
+		<a href="#alterar" class="btn-alterar" th:attr="data-codigo=${item.codigo}"><i class="fa fa-pencil fa-fw"></i></a>
+		<a href="#excluir" class="btn-excluir" th:attr="data-codigo=${item.codigo}"><i class="fa fa-trash fa-fw text-danger"></i></a>
+	</td>
+</tr>

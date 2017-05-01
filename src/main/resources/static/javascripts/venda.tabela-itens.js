@@ -1,157 +1,9 @@
-//Brewer.TabelaItens = (function() {
-//
-//	// Pegando as classes necessarias
-//	function TabelaItens(autocomplete) {
-//		this.autocomplete = autocomplete;
-//		this.tabelaCervejasContainer = $('.js-tabela-cervejas-container');
-//		this.uuid = $('#uuid').val();
-//		this.emitter = $({});
-//		this.on = this.emitter.on.bind(this.emitter);
-//		this.modal = $('#itemVenda');
-//		this.modalExcluir = $('#excluirItem');
-//	}
-//
-//	// Iniciando os modais
-//	TabelaItens.prototype.iniciar = function() {
-//		this.autocomplete.on('item-selecionado', onItemSelecionado.bind(this));
-//
-//		this.modal.find('form').on('submit', salvarItemSelecionado.bind(this));
-//		this.modal.on('hide.bs.modal', function() {
-//			$(this).find('form')[0].reset();
-//		});
-//
-//		this.modalExcluir.find('form').on('submit',
-//				excluirItemSelecionado.bind(this));
-//		this.modalExcluir.on('hide.bs.modal', function() {
-//			$(this).find('form')[0].reset();
-//		});
-//
-//		bindAlterar.call(this);
-//		bindExcluir.call(this);
-//		bindTabelaItem.call(this);
-//	}
-//
-//	// Montando o valor total da tabela
-//	TabelaItens.prototype.valorTotal = function() {
-//		return this.tabelaCervejasContainer.data('valor');
-//	}
-//
-//	// Salva ou altera um item selecionado.
-//	function salvarItemSelecionado(evento) {
-//		evento.preventDefault();
-//		evento.stopPropagation();
-//
-//		var _form = this.modal.find('form');
-//		var resposta = $.ajax({
-//			url : _form.attr('action'),
-//			method : _form.attr('method'),
-//			data : this.modal.find('form').serialize()
-//		});
-//
-//		resposta.done(onItemAtualizadoNoServidor.bind(this));
-//	}
-//
-//	// Excluir item da tabela
-//	function excluirItemSelecionado(evento) {
-//		evento.preventDefault();
-//		evento.stopPropagation();
-//
-//		var _form = this.modalExcluir.find('form');
-//		var resposta = $.ajax({
-//			url : 'item/' + this.uuid + '/excluir/'
-//					+ _form.find('#uuidItem').val(),
-//			method : 'delete'
-//		});
-//
-//		resposta.done(onItemAtualizadoNoServidor.bind(this));
-//	}
-//
-//	// Abre modal com os dados do item.
-//	function onItemSelecionado(evento, item) {
-//		populateAndOpenModalSalvar(this.modal, {
-//			cerveja : item,
-//			quantidade : 1,
-//			valorUnitario : item.valor
-//		});
-//	}
-//
-//	// Atualiza os itens no servidor
-//	function onItemAtualizadoNoServidor(html) {
-//		this.tabelaCervejasContainer.html(html);
-//
-//		this.modal.modal('hide');
-//		this.modalExcluir.modal('hide');
-//
-//		bindAlterar.call(this);
-//		bindExcluir.call(this);
-//
-//		var tabelaItem = bindTabelaItem.call(this);
-//		this.emitter.trigger('tabela-itens-atualizada', tabelaItem
-//				.data('valor-total'));
-//	}
-//
-//	// Populando o modal de alterar
-//	function bindAlterar() {
-//		var _modal = this.modal;
-//		$('.btn-alterar').on('click', function(e) {
-//			var _this = $(this);
-//			$.ajax({
-//				url : '/vendas/item',
-//				dataType : 'json',
-//				contentType : 'application/json',
-//				type : 'GET',
-//				data : {
-//					codigo : _this.data('codigo')
-//				},
-//				success : function(item) {
-//					populateAndOpenModalSalvar(_modal, item);
-//				}
-//			});
-//		});
-//	}
-//
-//	// Populando o modal de excluir
-//	function bindExcluir() {
-//		var _modal = this.modalExcluir;
-//		$('.btn-excluir').on('click', function() {
-//			var _tr = $(this).closest('tr');
-//			_modal.find('#uuidItem').val($(this).data('uuid'))
-//			_modal.find('#descricao').val(_tr.find('.descricao').text());
-//			_modal.modal('show');
-//		});
-//	}
-//
-//	// Bind
-//	function bindTabelaItem() {
-//		var tabelaItem = $('.js-tabela-item');
-//		return tabelaItem;
-//	}
-//
-//	return TabelaItens;
-//
-//}());
-//
-//function populateAndOpenModalSalvar(modal, item) {
-//	modal.find('#codigo').val(item.codigo || '');
-//	modal.find('#cod-cerveja').val(item.cerveja.codigo);
-//	modal.find('#sku').val(item.cerveja.sku);
-//	modal.find('#descricao').val(item.cerveja.descricao || item.cerveja.nome);
-//	modal.find('#obs').val(item.observacoes || '');
-//	modal.find('#quantidade').val(item.quantidade);
-//	modal.find('#valor').val(item.valorUnitario);
-//	sumAB('#quantidade', '#valor');
-//	modal.modal({
-//		'backdrop' : 'static',
-//		'keyboard' : false
-//	});
-//}
-
 var PedidoItemController = {
 
 	$modalSalvar : undefined,
 	$modalExcluir : undefined,
 
-	_populateAndOpenModalSalvar : function(item) {
+	_populateAndOpenModalSalvar : function(event, item) {
 		this.$modalSalvar.find('#codigo').val(item.codigo || '');
 		this.$modalSalvar.find('#cod-cerveja').val(item.cerveja.codigo);
 		this.$modalSalvar.find('#sku').val(item.cerveja.sku);
@@ -159,6 +11,7 @@ var PedidoItemController = {
 		this.$modalSalvar.find('#obs').val(item.observacoes || '');
 		this.$modalSalvar.find('#quantidade').val(Brewer.formatarMoeda(item.quantidade));
 		this.$modalSalvar.find('#valor').val(Brewer.formatarMoeda(item.valorUnitario));
+		this.$modalSalvar.find('#event').val(event);
 		this._sumAB('#quantidade', '#valor');
 		this.$modalSalvar.modal({
 			'backdrop' : 'static',
@@ -175,11 +28,12 @@ var PedidoItemController = {
 	salvar : function($form) {
 		$.ajax({
 			url : $form.attr('action'),
-			method : 'post',
+			method : 'POST',
 			data : $form.serialize(),
-			success : function(item) {
-				// lógica de adição na tabela.
-				// compilar o template.
+			success : function(html) {
+				var event = $form.find('#event').val();
+				var codigo = $form.find('#codigo').val();
+				TabelaController.trigger(event, [html, codigo]);
 				PedidoItemController.$modalSalvar.modal('hide');
 			}
 		});
@@ -188,20 +42,20 @@ var PedidoItemController = {
 	visualizar : function($button) {
 		$.ajax({
 			url : '/vendas/item',
+			method : 'GET',
 			dataType : 'json',
 			contentType : 'application/json',
-			type : 'GET',
 			data : {
 				codigo : $button.data('codigo')
 			},
 			success : function(item) {
-				PedidoItemController._populateAndOpenModalSalvar(item);
+				PedidoItemController._populateAndOpenModalSalvar('atualizar', item);
 			}
 		});
 	},
 
 	criar : function(item) {
-		this._populateAndOpenModalSalvar({
+		this._populateAndOpenModalSalvar('adicionar', {
 			cerveja : item,
 			quantidade : 1,
 			valorUnitario : item.valor
@@ -210,41 +64,61 @@ var PedidoItemController = {
 
 	excluir : function($form) {
 		$.ajax({
-			url : '/vendas/item/excluir',
-			dataType : 'json',
-			contentType : 'application/json',
-			type : 'DELETE',
+			url : $form.attr('action'),
+			method : 'POST',
 			data : $form.serialize(),
 			success : function(message) {
-				// remove item da tabela e mosta mensagem
+				PedidoItemController._notify('success', message);
+				TabelaController.trigger('excluir', [$form.find('#codigo').val()]);
+				PedidoItemController.$modalExcluir.modal('hide');
 			}
 		});
 	},
 	
 	visualizarExclusao : function($button) {
-		this.$modalExcluir.find('#codigo').val($button.data('codigo'));
+		var codigo = $button.data('codigo');
+		this.$modalExcluir.find('#codigo').val(codigo);
+		this.$modalExcluir.find('.codigo').text(codigo);
 		this.$modalExcluir.modal('show');
 	},
 
-	_createModals : function() {
+	_initModals : function() {
+		function resetForm() {
+			$(this).find('form')[0].reset();
+		}
 		this.$modalSalvar = $('#itemVenda');
 		this.$modalExcluir = $('#excluirItem');
+		this.$modalSalvar.on('hide.bs.modal', resetForm);
+		this.$modalExcluir.on('hide.bs.modal', resetForm);		
 	},
 	
-	init : function(autocomplete) {
-		this._createModals();
-		
-		this.$modalSalvar.on('hide.bs.modal', function() {
-			$(this).find('form')[0].reset();
-		});
-		this.$modalExcluir.on('hide.bs.modal', function() {
-			$(this).find('form')[0].reset();
-		});
-		
-		this.$modalSalvar.find('form').on('submit', function(e) {
+	_bindFormModal : function($modal, callback) {
+		$modal.find('form').on('submit', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
-			PedidoItemController.salvar($(this));
+			callback($(this));
+		});
+	},
+	
+	_notify : function(type, message) {
+		$('.top-right').notify({ 
+			type: type, message: { text: message } 
+		}).show();
+	},
+	
+	init : function() {
+		TabelaController.init();
+		
+		var autocomplete = new Brewer.Autocomplete();
+		autocomplete.iniciar();
+		
+		this._initModals();
+		
+		this._bindFormModal(this.$modalSalvar, PedidoItemController.salvar);
+		this._bindFormModal(this.$modalExcluir, PedidoItemController.excluir);		
+		
+		autocomplete.on('item-selecionado', function(e, item) {
+			PedidoItemController.criar(item);
 		});
 		$('#valor').on('keypress change', function() {
 			PedidoItemController._sumAB(this, '#quantidade');
@@ -252,21 +126,61 @@ var PedidoItemController = {
 		$('#quantidade').on('keypress change', function() {
 			PedidoItemController._sumAB(this, '#valor');
 		});
-		autocomplete.on('item-selecionado', function(e, item) {
-			PedidoItemController.criar(item);
-		});
-		$('.btn-alterar').on('click', function(e) {
+		$('#tabela-itens').on('click', '.btn-alterar', function(e) {
 			PedidoItemController.visualizar($(this));
 		});
-		$('.btn-excluir').on('click', function() {
+		$('#tabela-itens').on('click', '.btn-excluir', function(e) {
 			PedidoItemController.visualizarExclusao($(this));
 		});
 	}
 
 }
 
+var TabelaController = {
+	
+	table : '#tabela-itens',	
+	
+	_adicionar : function(event, html) {
+		var $tbody = $(TabelaController.table + ' tbody')
+		$tbody.find('tr.empty-tr').addClass('hidden');	
+		$tbody.append(html);
+		TabelaController._refreshTotais();
+	},
+	
+	_atualizar : function(event, html, codigo) {
+		var $tr = $(TabelaController.table + ' tr[data-codigo=' + codigo + ']');
+		$tr.replaceWith(html);
+		TabelaController._refreshTotais();
+	},
+	
+	_excluir : function(event, codigo) {
+		var $tbody = $(TabelaController.table + ' tbody');
+		$tbody.find('tr[data-codigo=' + codigo + ']').hide('slow', function() {
+			$(this).detach();
+			TabelaController._refreshTotais();
+			if ($tbody.find('tr:not(.empty-tr)').size() == 0) {
+				$tbody.find('tr.empty-tr').removeClass('hidden');
+			}
+		});
+	},
+	
+	_refreshTotais : function() {
+		var total = 0;
+		$(TabelaController.table + ' tbody td.total-item').each(function() {
+			total += Brewer.recuperarValor($(this).text());
+		});
+		$('.js-valor-total-box').text(Brewer.formatarMoeda(total));
+	},
+	
+	init : function() {
+		$.extend(TabelaController, $({}));
+		TabelaController.on('atualizar', this._atualizar);
+		TabelaController.on('adicionar', this._adicionar);
+		TabelaController.on('excluir', this._excluir);
+	}
+	
+}
+
 $(function() {
-	var autocomplete = new Brewer.Autocomplete();
-	autocomplete.iniciar();
-	PedidoItemController.init(autocomplete);
+	PedidoItemController.init();
 });
