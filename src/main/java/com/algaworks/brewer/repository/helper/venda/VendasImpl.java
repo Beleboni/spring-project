@@ -160,7 +160,8 @@ public class VendasImpl implements VendasQueries {
 	}
 	
 	private void adicionarFiltro(VendaFilter filtro, Criteria criteria) {
-		criteria.createAlias("cliente", "c");
+		criteria.createAlias("cliente", "c", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("banco", "b", JoinType.LEFT_OUTER_JOIN);
 		
 		if (filtro != null) {
 			if (!StringUtils.isEmpty(filtro.getCodigo())) {

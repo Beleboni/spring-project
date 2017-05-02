@@ -104,13 +104,13 @@
 				</thead>
 				
 	            <tbody>
-					<tr th:each="venda : ${pagina.conteudo}">
+					<tr th:each="venda : ${pagina.conteudo}" th:classappend="${venda.dataFinalizacao == null} ? 'warning' : ''">
 						<td th:text="${venda.codigo}"></td>
-						<td th:text="${venda.cliente.nome}"></td>
+						<td th:text="${venda.cliente != null} ? ${venda.cliente.nome} : ''"></td>
 						<td th:text="${{venda.dataCriacao}}"></td>
-						<td th:text="|R$ ${{venda.valorTotal}}|"></td>
-						<td th:text="${venda.usuario.nome}"></td>
-						<td th:text="${venda.status.descricao}"></td>
+						<td th:text="|R$ ${{venda.valorTotalItens}}|"></td>
+						<td th:text="${venda.usuario != null} ? ${venda.usuario.nome} : ''"></td>
+						<td th:text="${venda.status != null} ? ${venda.status.descricao} : ''"></td>
 						<!-- <td>
 							<th:block th:if="${venda.status == T(com.algaworks.brewer.model.StatusVenda).ORCAMENTO}">
 								<span class="label  label-success">Ativo</span>
