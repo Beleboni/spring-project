@@ -14,7 +14,7 @@ import com.algaworks.brewer.repository.filter.VendaFilter;
 
 public interface VendasQueries {
 
-	public Page<Venda> filtrar(VendaFilter filtro, Usuario usuario, Pageable pageable);
+	Page<Venda> filtrar(VendaFilter filtro, Usuario usuario, Pageable pageable);
 	
 	public Venda buscarComItens(Long codigo);
 	

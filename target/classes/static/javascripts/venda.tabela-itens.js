@@ -138,7 +138,7 @@ var PedidoItemController = {
 
 var TabelaController = {
 	
-	table : '#tabela-itens',	
+	table : '#tabela-itens',
 	
 	_adicionar : function(event, html) {
 		var $tbody = $(TabelaController.table + ' tbody')

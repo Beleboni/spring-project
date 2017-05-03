@@ -35,22 +35,14 @@
 			<brewer:message/>
 			
 			<div class="row">
-				<div class="form-group  col-sm-6">
-					<label class="control-label" for="codigo">Código</label>
-					<input type="text" class="form-control" id="codigo" autofocus="autofocus" th:field="*{codigo}"/>
-				</div>
-				
-				<div class="form-group  col-sm-6">
-					<label for="status" class="control-label">Status</label>
-					<select id="status" class="form-control" th:field="*{status}">
-	                    <option value="">Todos os status</option>
-	                    <option th:each="status : ${todosStatus}" th:value="${status}" th:text="${status.descricao}"></option>
-	                </select>
-				</div>
+				<div class="form-group  col-sm-12">
+					<label class="control-label" for="nomeCliente">Nome cliente</label>
+					<input type="text" class="form-control" id="nomeCliente" th:field="*{nomeCliente}"/>
+				</div>	
 			</div>
 			
 			<div class="row">
-				<div class="form-group  col-sm-6">
+				<div class="form-group  col-sm-8">
 					<label for="dataCriacaoInicial">Data de criação</label>
 					<div class="form-inline">
 						<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="dataCriacaoInicial" 
@@ -60,28 +52,13 @@
 							th:field="*{ate}" autocomplete="off"/>
 					</div>
 				</div>
-				
-				<div class="form-group  col-sm-6">
-					<label for="valorMinimo">Valor total</label>
-					<div class="form-inline">
-						<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMinimo" th:field="*{valorMinimo}"/>
-						<label for="valorMaximo" class="aw-form-label-between">até</label>
-						<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMaximo" th:field="*{valorMaximo}"/>
-					</div>
+				<div class="form-group  col-sm-4">
+					<label for="status" class="control-label">Status</label>
+					<select id="status" class="form-control" th:field="*{status}">
+	                    <option value="">Todos os status</option>
+	                    <option th:each="status : ${todosStatus}" th:value="${status}" th:text="${status.descricao}"></option>
+	                </select>
 				</div>
-			</div>
-			
-			<div class="row">
-				<div class="form-group  col-sm-6">
-					<label class="control-label" for="nomeCliente">Nome cliente</label>
-					<input type="text" class="form-control" id="nomeCliente" th:field="*{nomeCliente}"/>
-				</div>
-			
-				<div class="form-group  col-sm-6">
-					<label for="cpfOuCnpj" class="control-label">CPF/CNPJ</label>
-					<input type="text" class="form-control" id="cpfOuCnpj" th:field="*{cpfOuCnpjCliente}"/>
-				</div>
-				
 			</div>
 			
 			<button type="submit" class="btn  btn-primary">Pesquisar</button>
@@ -97,6 +74,7 @@
 	                	</th>
 	                	<th>Data de criação</th>
 	                	<th>Valor total</th>
+	                	<th>Valor total entregue</th>
 	                	<th>Vendedor</th>
 	                	<th>Status</th>
 	                 	<th class="col-md-2"></th>
@@ -106,11 +84,12 @@
 	            <tbody>
 					<tr th:each="venda : ${pagina.conteudo}" th:classappend="${venda.dataFinalizacao == null} ? 'warning' : ''">
 						<td th:text="${venda.codigo}"></td>
-						<td th:text="${venda.cliente != null} ? ${venda.cliente.nome} : ''"></td>
+						<td th:text="${venda.cliente}"></td>
 						<td th:text="${{venda.dataCriacao}}"></td>
-						<td th:text="|R$ ${{venda.valorTotalItens}}|"></td>
-						<td th:text="${venda.usuario != null} ? ${venda.usuario.nome} : ''"></td>
-						<td th:text="${venda.status != null} ? ${venda.status.descricao} : ''"></td>
+						<td th:text="|R$ ${{venda.valorTotal}}|"></td>
+						<td th:text="|R$ ${{venda.valorEntregue}}|"></td>
+						<td th:text="${venda.vendedor}"></td>
+						<td th:text="${venda.status.descricao}"></td>
 						<!-- <td>
 							<th:block th:if="${venda.status == T(com.algaworks.brewer.model.StatusVenda).ORCAMENTO}">
 								<span class="label  label-success">Ativo</span>

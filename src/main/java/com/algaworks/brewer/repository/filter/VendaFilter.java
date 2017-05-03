@@ -2,6 +2,9 @@ package com.algaworks.brewer.repository.filter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.algaworks.brewer.model.StatusVenda;
 
@@ -18,6 +21,14 @@ public class VendaFilter {
 	private String nomeCliente;
 	private String cpfOuCnpjCliente;
 
+	public LocalDateTime getDesdeWithTime() {
+		return this.desde.atTime(0, 0, 0, 0);
+	}
+	
+	public LocalDateTime getAteWithTime() {
+		return this.ate.atTime(23, 59, 59, 999);
+	}
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -67,7 +78,7 @@ public class VendaFilter {
 	}
 
 	public String getNomeCliente() {
-		return nomeCliente;
+		return StringUtils.isEmpty(nomeCliente) ? null : nomeCliente;
 	}
 
 	public void setNomeCliente(String nomeCliente) {

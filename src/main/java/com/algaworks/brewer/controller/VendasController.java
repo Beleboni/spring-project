@@ -80,7 +80,8 @@ public class VendasController {
 	@GetMapping("/nova")
 	public ModelAndView nova() {
 		Venda venda = vendas.save(new Venda());
-		return new ModelAndView("redirect:/vendas/" + venda.getCodigo() + "/nova");
+		return new ModelAndView("redirect:/vendas/" + venda.getCodigo()
+				+ "/nova");
 	}
 
 	@GetMapping("/{codigo}/nova")
@@ -100,7 +101,7 @@ public class VendasController {
 	public @ResponseBody ItemVenda getItem(Long codigo) {
 		return itensVenda.findOne(codigo);
 	}
-	
+
 	@Transactional
 	@PostMapping(value = "/item/salvar")
 	public ModelAndView saveItem(ItemVenda item) {
@@ -134,7 +135,8 @@ public class VendasController {
 
 	@Transactional
 	@DeleteMapping("/excluir/{codigo}")
-	public ModelAndView excluir(@PathVariable("codigo") Venda venda, RedirectAttributes attributes) {
+	public ModelAndView excluir(@PathVariable("codigo") Venda venda,
+			RedirectAttributes attributes) {
 		vendas.delete(venda);
 		attributes.addFlashAttribute("mensagem", "Venda excluída com sucesso");
 		return new ModelAndView("redirect:/vendas/");
