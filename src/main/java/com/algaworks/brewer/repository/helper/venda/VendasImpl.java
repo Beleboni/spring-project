@@ -33,7 +33,13 @@ public class VendasImpl implements VendasQueries {
 
 	public static final String CLAUSE_FROM_AND_WHERE_FILTRAR = "from Venda v left join v.cliente c left join v.usuario u "
 			+ "where (v.dataCriacao between ?1 and ?2) and (v.status = ?3 or ?3 is null) "
-			+ "and (c.nome like concat('%', ?4, '%') or ?4 is null)";
+			+ "and (c.nome like concat('%', ?4, '%') or ?4 is null) "
+			+ "and (v.usuario = ?5 or ?5 is null))";
+	
+//	public static final String CLAUSE_FROM_AND_WHERE_FILTRAR = "from Venda v left join v.cliente c left join v.usuario u "
+//			+ "where (v.dataCriacao between ?1 and ?2) and (v.status = ?3 or ?3 is null) "
+//			+ "and (c.nome like concat('%', ?4, '%') or ?4 is null) "
+//			+ "and (v.usuario = ?5 or ?5 is null) and (v.empresa.codigo = ?6)";
 
 	@PersistenceContext
 	private EntityManager manager;
@@ -47,9 +53,18 @@ public class VendasImpl implements VendasQueries {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Venda> filtrar(VendaFilter filtro, Usuario usuario, Pageable pageable) {
+		Usuario user = usuario.isAdministrador() ? null : usuario;
 		return vendas.filtrar(filtro.getDesdeWithTime(), filtro.getAteWithTime(), filtro.getStatus(), 
-				filtro.getNomeCliente(), pageable);
+				filtro.getNomeCliente(), user, pageable);
 	}
+	
+//	@Override
+//	@Transactional(readOnly = true)
+//	public Page<Venda> filtrar(VendaFilter filtro, Usuario usuario, Pageable pageable) {
+//		Usuario user = usuario.isAdministrador() ? null : usuario;
+//		return vendas.filtrar(filtro.getDesdeWithTime(), filtro.getAteWithTime(), filtro.getStatus(), 
+//				filtro.getNomeCliente(), user, usuario.getUsuario().getCodigo(), pageable);
+//	}
 
 	@Transactional(readOnly = true)
 	@Override

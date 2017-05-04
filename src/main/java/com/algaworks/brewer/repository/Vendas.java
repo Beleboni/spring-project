@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.algaworks.brewer.model.StatusVenda;
+import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.helper.venda.VendasImpl;
 import com.algaworks.brewer.repository.helper.venda.VendasQueries;
@@ -16,12 +17,20 @@ import com.algaworks.brewer.repository.helper.venda.VendasQueries;
 @Repository
 public interface Vendas extends JpaRepository<Venda, Long>, VendasQueries {
 
-	//Ver aqui
+	// Ver aqui
 	@Query(value = "select new com.algaworks.brewer.dto.VendaDTO(v.codigo, c.nome, v.dataCriacao, v.dataFinalizacao, "
 			+ "(select sum(iv.quantidade * iv.valorUnitario) from ItemVenda iv where iv.venda = v), "
 			+ "(select sum(cm.totalEntregue) from Comissao cm where cm.venda = v), u.nome, v.status) "
 			+ VendasImpl.CLAUSE_FROM_AND_WHERE_FILTRAR, countQuery = "select count(v) "
 			+ VendasImpl.CLAUSE_FROM_AND_WHERE_FILTRAR)
-	Page<Venda> filtrar(LocalDateTime inicio, LocalDateTime fim, StatusVenda status, String nomeCliente, Pageable pageable);
+	Page<Venda> filtrar(LocalDateTime inicio, LocalDateTime fim, StatusVenda status, String nomeCliente, Usuario usuario,
+			Pageable pageable);
 
+//	@Query(value = "select new com.algaworks.brewer.dto.VendaDTO(v.codigo, c.nome, v.dataCriacao, v.dataFinalizacao, "
+//			+ "(select sum(iv.quantidade * iv.valorUnitario) from ItemVenda iv where iv.venda = v), "
+//			+ "(select sum(cm.totalEntregue) from Comissao cm where cm.venda = v), u.nome, v.status) "
+//			+ VendasImpl.CLAUSE_FROM_AND_WHERE_FILTRAR, countQuery = "select count(v) "
+//			+ VendasImpl.CLAUSE_FROM_AND_WHERE_FILTRAR)
+//	Page<Venda> filtrar(LocalDateTime inicio, LocalDateTime fim, StatusVenda status, String nomeCliente, Usuario usuario,
+//			Long codEmpresa, Pageable pageable);
 }
