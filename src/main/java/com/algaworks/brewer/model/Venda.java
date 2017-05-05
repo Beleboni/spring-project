@@ -192,6 +192,10 @@ public class Venda {
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
+	
+	public boolean isPermiteEdicaoItens() {
+		return Arrays.asList(StatusVenda.EMITIDA, StatusVenda.ORCAMENTO).contains(this.status);
+	}
 
 	@Override
 	public int hashCode() {

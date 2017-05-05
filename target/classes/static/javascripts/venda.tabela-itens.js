@@ -183,4 +183,16 @@ var TabelaController = {
 
 $(function() {
 	PedidoItemController.init();
+	
+	$('select#status').on('change', function() {
+		if ($(this).val() == 'CANCELADA') {
+			$('#cervejas #cerveja').attr('disabled', 'disabled');
+			$('#tabela-itens .ok').removeClass('hidden');
+			$('#tabela-itens .acoes').addClass('hidden');
+		} else {
+			$('#cervejas #cerveja').removeAttr('disabled');
+			$('#tabela-itens .acoes').removeClass('hidden');
+			$('#tabela-itens .ok').addClass('hidden');
+		}
+	});
 });

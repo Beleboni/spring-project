@@ -13,6 +13,7 @@
    			<div class="modal-body">
    				<form class="form" th:action="@{/vendas/item/salvar}" method="post" th:object="${item}">
    					<input type="hidden" id="cod-venda" th:field="*{venda}">
+   					<input type="hidden" id="status-venda" th:field="${venda.status}">
    					<input type="hidden" id="cod-cerveja" th:field="*{cerveja}">
    					<input type="hidden" id="codigo" th:field="*{codigo}">
    					<input type="hidden" id="event">

@@ -15,8 +15,13 @@
 	<td class="total-item">
 		R$ [[${{item.valorTotal}}]]
 	</td>
-	<td>
-		<a href="#alterar" class="btn-alterar" th:attr="data-codigo=${item.codigo}"><i class="fa fa-pencil fa-fw"></i></a>
-		<a href="#excluir" class="btn-excluir" th:attr="data-codigo=${item.codigo}"><i class="fa fa-trash fa-fw text-danger"></i></a>
+	<td class="text-center">
+		<span class="ok text-success" th:classappend="${!item.venda.permiteEdicaoItens} ? '' : 'hidden'">
+			<i class="fa fa-check fa-fw"></i>
+		</span>
+		<span class="acoes" th:classappend="${item.venda.permiteEdicaoItens} ? '' : 'hidden'">
+			<a href="#alterar" class="btn-alterar" th:attr="data-codigo=${item.codigo}"><i class="fa fa-pencil fa-fw"></i></a>
+			<a href="#excluir" class="btn-excluir" th:attr="data-codigo=${item.codigo}"><i class="fa fa-trash fa-fw text-danger"></i></a>
+		</span>
 	</td>
 </tr>

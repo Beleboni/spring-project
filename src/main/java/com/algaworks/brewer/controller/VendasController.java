@@ -96,6 +96,19 @@ public class VendasController {
 		mv.addObject("venda", vendaBanco);
 		return mv;
 	}
+	
+	@GetMapping("/{codigo}/ver")
+	public ModelAndView ver(@PathVariable("codigo") Venda venda) {
+		ModelAndView mv = new ModelAndView("venda/CadastroVenda");
+		Venda vendaBanco = vendas.buscarComItens(venda.getCodigo());
+		mv.addObject("bancos", bancos.bancosAtivo(1l));
+		mv.addObject("itens", vendaBanco.getItens());
+		mv.addObject("valorTotalItens", vendaBanco.getValorTotalItens());
+		mv.addObject("statusVenda", StatusVenda.values());
+		mv.addObject("item", new ItemVenda(venda));
+		mv.addObject("venda", vendaBanco);
+		return mv;
+	}
 
 	@RequestMapping(value = "/item", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
 	public @ResponseBody ItemVenda getItem(Long codigo) {
