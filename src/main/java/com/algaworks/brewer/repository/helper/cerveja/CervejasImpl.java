@@ -47,6 +47,8 @@ public class CervejasImpl implements CervejasQueries {
 		return new PageImpl<>(criteria.list(), pageable, total(filtro));
 	}
 	
+	
+	//por em (lower(sku) like lower(:skuOuNome) or lower(nome) like lower(:skuOuNome))
 	@Override
 	public List<CervejaDTO> porSkuOuNome(String skuOuNome) {
 		String jpql = "select new com.algaworks.brewer.dto.CervejaDTO(codigo, sku, nome, origem, valor, foto) "
